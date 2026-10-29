@@ -1,0 +1,20 @@
+{
+  "name": "hcuamp-bienes-tecnologicos",
+  "version": "1.0.0",
+  "description": "Sistema Institucional de Control - Bienes Tecnológicos, Redes y Ofimática - HCUAMP",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve .",
+    "deploy": "npx vercel --prod"
+  },
+  "keywords": [
+    "hcuamp",
+    "inventario",
+    "redes",
+    "ofimatica",
+    "google-sheets",
+    "apps-script"
+  ],
+  "author": "Departamento TIC - HCUAMP",
+  "license": "MIT"
+}

@@ -72,7 +72,7 @@ function inicializarBaseDeDatos() {
 
     // 2. Hoja "redes"
     var sheetRedes = ss.getSheetByName("redes") || ss.insertSheet("redes");
-    var headersRedes = ["ID", "MODEM (CANT)", "ROUTER (CANT)", "SWITCH (CANT)", "PUNTO DE ACCESO (CANT)", "TIPO DE CABLEADO", "CANALIZACIÓN", "SSID WI-FI", "BANDA WI-FI", "PROVEEDOR", "VELOCIDAD", "RESPONSABLE DE PAGOS", "ESTATUS"];
+    var headersRedes = ["ID", "DEPARTAMENTO", "MODEM (CANT)", "ROUTER (CANT)", "SWITCH (CANT)", "PUNTO DE ACCESO (CANT)", "TIPO DE CABLEADO", "CANALIZACIÓN", "SSID WI-FI", "BANDA WI-FI", "PROVEEDOR", "VELOCIDAD", "RESPONSABLE DE PAGOS", "ESTATUS"];
     if (sheetRedes.getLastRow() === 0) {
       sheetRedes.appendRow(headersRedes);
     } else {
@@ -801,31 +801,32 @@ function obtenerTodasLasRedes() {
     if (!sheet || sheet.getLastRow() <= 1) return [];
 
     var lastRow = sheet.getLastRow();
-    var data = sheet.getRange(2, 1, lastRow - 1, 13).getValues();
+    var data = sheet.getRange(2, 1, lastRow - 1, 14).getValues();
     var resultados = [];
 
     for (var i = 0; i < data.length; i++) {
       var row = data[i];
-      var estatus = toUpper(row[12]);
+      var estatus = toUpper(row[13]);
       if (estatus === "") estatus = "ACTIVO";
 
       if (estatus !== "INACTIVO") {
-        var ssid = toUpper(row[7]);
+        var ssid = toUpper(row[8]);
         if (ssid !== "") {
           resultados.push({
             sheetRow: i + 2,
             id: String(row[0] || ""),
-            modem: Number(row[1]) || 0,
-            router: Number(row[2]) || 0,
-            switch: Number(row[3]) || 0,
-            ap: Number(row[4]) || 0,
-            cableado: toUpper(row[5]),
-            canalizacion: toUpper(row[6]),
+            departamento: toUpper(row[1]),
+            modem: Number(row[2]) || 0,
+            router: Number(row[3]) || 0,
+            switch: Number(row[4]) || 0,
+            ap: Number(row[5]) || 0,
+            cableado: toUpper(row[6]),
+            canalizacion: toUpper(row[7]),
             ssid: ssid,
-            banda: toUpper(row[8]),
-            proveedor: toUpper(row[9]),
-            velocidad: toUpper(row[10]),
-            responsable: toUpper(row[11]),
+            banda: toUpper(row[9]),
+            proveedor: toUpper(row[10]),
+            velocidad: toUpper(row[11]),
+            responsable: toUpper(row[12]),
             estatus: estatus
           });
         }
@@ -851,6 +852,7 @@ function guardarInfraestructuraRed(data, solicitante) {
     var idGenerado = "RED-" + Utilities.formatDate(new Date(), "America/Caracas", "yyyyMMdd-HHmmss");
     var rowData = [
       idGenerado,
+      toUpper(data.departamento),
       Number(data.modem) || 0,
       Number(data.router) || 0,
       Number(data.switch) || 0,
@@ -881,10 +883,11 @@ function actualizarRed(sheetRow, data, solicitante) {
     if (!sheet) return { status: "error", message: "No se encontró la hoja redes." };
 
     var idActual = sheet.getRange(sheetRow, 1).getValue() || ("RED-" + Date.now());
-    var estatusActual = toUpper(sheet.getRange(sheetRow, 13).getValue()) || "ACTIVO";
+    var estatusActual = toUpper(sheet.getRange(sheetRow, 14).getValue()) || "ACTIVO";
 
     var rowData = [
       idActual,
+      toUpper(data.departamento),
       Number(data.modem) || 0,
       Number(data.router) || 0,
       Number(data.switch) || 0,
@@ -1033,7 +1036,7 @@ function eliminarFilaSheets(nombreHoja, sheetRow, solicitante) {
     if (sheet && sheetRow && sheetRow > 1) {
       var colEstatus = 15; // Columna O para "bienes"
       if (nombreHoja === "redes") {
-        colEstatus = 13; // Columna M para "redes"
+        colEstatus = 14; // Columna N para "redes"
       } else if (nombreHoja === "cuestionario_ofimatica") {
         colEstatus = 14; // Columna N para "cuestionario_ofimatica"
       } else if (nombreHoja === "usuarios") {

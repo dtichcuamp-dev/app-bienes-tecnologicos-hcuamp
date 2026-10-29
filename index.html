@@ -991,6 +991,11 @@
           <div class="card-body p-3 p-md-4">
             <form id="networkForm" class="needs-validation" novalidate>
               <div class="row g-4">
+                <div class="col-12 col-md-4">
+                  <label for="departamento" class="form-label">Departamento inspeccionado * <i class="fa-solid fa-circle-question text-muted" data-bs-toggle="tooltip" title="Departamento o área donde se realizó la inspección de la infraestructura de red."></i></label>
+                  <input type="text" class="form-control uppercase-input" id="departamento" placeholder="EJ. ADMINISTRACIÓN" required>
+                </div>
+
                 <div class="col-12">
                   <label class="form-label fw-bold text-dark mb-2">1. Equipos en Área (Marque y asigne cantidad) <i class="fa-solid fa-circle-question text-muted" data-bs-toggle="tooltip" title="Indique los dispositivos de red presentes en esta ubicación activando la casilla e ingresando la cantidad."></i></label>
                   <div class="row g-3">
@@ -1033,7 +1038,7 @@
                   </div>
                 </div>
 
-                <hr class="text-muted opacity-25">
+                <div class="col-12"><hr class="text-muted opacity-25"></div>
 
                 <div class="col-12 col-md-6">
                   <label for="cableado" class="form-label">2. Tipo de Cableado * <i class="fa-solid fa-circle-question text-muted" data-bs-toggle="tooltip" title="Categoría del cableado de red estructurado presente en el departamento."></i></label>
@@ -1105,7 +1110,7 @@
           <div class="col-12 col-md-6">
             <div class="input-group">
               <span class="input-group-text bg-white border-end-0"><i class="fa-solid fa-magnifying-glass text-muted"></i></span>
-              <input type="text" id="searchNetworkInput" class="form-control border-start-0 uppercase-input" placeholder="Buscar por SSID, Proveedor o Responsable...">
+              <input type="text" id="searchNetworkInput" class="form-control border-start-0 uppercase-input" placeholder="Buscar por departamento, SSID, proveedor o responsable...">
             </div>
           </div>
           <div class="col-12 col-md-6 text-md-end d-flex gap-2 justify-content-md-end flex-wrap">
@@ -1118,6 +1123,7 @@
           <table class="table table-hover align-middle mb-0" id="networkTable">
             <thead>
               <tr>
+                <th>Departamento</th>
                 <th>SSID / Banda</th>
                 <th>Equipos (Cant)</th>
                 <th>Cableado / Canaliz.</th>
@@ -1943,6 +1949,12 @@
     // Helper universal para mayúsculas
     function toUpper(str) {
       return (str || '').toString().trim().toUpperCase();
+    }
+
+    function escapeHTML(value) {
+      return String(value ?? '').replace(/[&<>"']/g, char => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+      })[char]);
     }
 
     // Elementos DOM
@@ -3065,6 +3077,7 @@
     async function guardarOActualizarRed() {
       const canalizacionChecked = document.querySelector('input[name="canalizacion"]:checked');
       const data = {
+        departamento: toUpper(document.getElementById('departamento').value),
         modem: document.getElementById('chk_modem').checked ? document.getElementById('qty_modem').value : 0,
         router: document.getElementById('chk_router').checked ? document.getElementById('qty_router').value : 0,
         switch: document.getElementById('chk_switch').checked ? document.getElementById('qty_switch').value : 0,
@@ -3121,16 +3134,20 @@
       dataToRender.forEach(item => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
-          <td><span class="fw-bold text-primary">${toUpper(item.ssid)}</span><br><small class="text-muted">BANDA: ${toUpper(item.banda)}</small></td>
+          <td>${escapeHTML(item.departamento)}</td>
+          <td><span class="fw-bold text-primary">${escapeHTML(item.ssid)}</span><br><small class="text-muted">BANDA: ${escapeHTML(item.banda)}</small></td>
           <td><small>MODEM: <b>${item.modem}</b> | ROUTER: <b>${item.router}</b><br>SWITCH: <b>${item.switch}</b> | AP: <b>${item.ap}</b></small></td>
-          <td><span class="badge bg-secondary">${toUpper(item.cableado)}</span><br><small class="text-muted">CANALIZACIÓN: ${toUpper(item.canalizacion)}</small></td>
-          <td><div class="fw-semibold">${toUpper(item.proveedor)}</div><small class="text-muted">VEL: ${toUpper(item.velocidad)}</small></td>
-          <td>${toUpper(item.responsable)}</td>
+          <td><span class="badge bg-secondary">${escapeHTML(item.cableado)}</span><br><small class="text-muted">CANALIZACIÓN: ${escapeHTML(item.canalizacion)}</small></td>
+          <td><div class="fw-semibold">${escapeHTML(item.proveedor)}</div><small class="text-muted">VEL: ${escapeHTML(item.velocidad)}</small></td>
+          <td>${escapeHTML(item.responsable)}</td>
           <td class="text-center no-print">
-            <button class="btn btn-sm btn-outline-primary me-1" title="Modificar" onclick='modificarRed(${JSON.stringify(item)})'><i class="fa-solid fa-pen-to-square"></i></button>
-            ${isAdmin ? `<button class="btn btn-sm btn-outline-danger" title="Borrar" onclick="borrarRed(${item.sheetRow})"><i class="fa-solid fa-trash-can"></i></button>` : ''}
+            <button class="btn btn-sm btn-outline-primary me-1" title="Modificar" data-action="edit"><i class="fa-solid fa-pen-to-square"></i></button>
+            ${isAdmin ? `<button class="btn btn-sm btn-outline-danger" title="Borrar" data-action="delete"><i class="fa-solid fa-trash-can"></i></button>` : ''}
           </td>
         `;
+        tr.querySelector('[data-action="edit"]').addEventListener('click', () => modificarRed(item));
+        const deleteButton = tr.querySelector('[data-action="delete"]');
+        if (deleteButton) deleteButton.addEventListener('click', () => borrarRed(item.sheetRow));
         networkTableBody.appendChild(tr);
       });
       initTooltips();
@@ -3138,6 +3155,7 @@
 
     function modificarRed(item) {
       editingRedRow = item.sheetRow;
+      document.getElementById('departamento').value = toUpper(item.departamento);
       document.getElementById('chk_modem').checked = item.modem > 0;
       document.getElementById('qty_modem').disabled = item.modem == 0;
       document.getElementById('qty_modem').value = item.modem;
@@ -3209,6 +3227,7 @@
     function filterNetworkData() {
       const query = toUpper(searchNetworkInput.value);
       const filtered = networks.filter(item =>
+        toUpper(item.departamento).includes(query) ||
         toUpper(item.ssid).includes(query) ||
         toUpper(item.proveedor).includes(query) ||
         toUpper(item.responsable).includes(query)
@@ -3218,9 +3237,9 @@
 
     function exportarCSVRedes() {
       if (networks.length === 0) return showNotification('No hay datos para exportar.', false);
-      const headers = ["SSID", "BANDA", "MODEM", "ROUTER", "SWITCH", "AP", "CABLEADO", "CANALIZACIÓN", "PROVEEDOR", "VELOCIDAD", "RESPONSABLE"];
+      const headers = ["DEPARTAMENTO", "SSID", "BANDA", "MODEM", "ROUTER", "SWITCH", "AP", "CABLEADO", "CANALIZACIÓN", "PROVEEDOR", "VELOCIDAD", "RESPONSABLE"];
       const rows = networks.map(i => [
-        `"${toUpper(i.ssid)}"`, `"${toUpper(i.banda)}"`, i.modem, i.router, i.switch, i.ap,
+        `"${toUpper(i.departamento)}"`, `"${toUpper(i.ssid)}"`, `"${toUpper(i.banda)}"`, i.modem, i.router, i.switch, i.ap,
         `"${toUpper(i.cableado)}"`, `"${toUpper(i.canalizacion)}"`, `"${toUpper(i.proveedor)}"`, `"${toUpper(i.velocidad)}"`, `"${toUpper(i.responsable)}"`
       ]);
       descargarCSV(headers, rows, "INFRAESTRUCTURA_RED_HCUAMP");

@@ -4,118 +4,67 @@
 
 ---
 
-## 📌 Resumen Arquitectónico
+## 📌 Resumen de Arquitectura
 
-El sistema está diseñado con una arquitectura desacoplada y de alto rendimiento:
+El sistema opera bajo un esquema desacoplado y de alta disponibilidad:
 
-1. **Frontend (Vercel / Web)**:
-   - Interfaz web moderna, responsiva y adaptable a dispositivos móviles, tablets y ordenadores de escritorio.
-   - Compresión client-side integrada (HTML5 Canvas) que optimiza las fotos capturadas con smartphones antes de enviarlas al servidor.
-   - Caché local (`localStorage`) para renderizado instantáneo.
-   - Exportación de auditorías a CSV compatible con Microsoft Excel (UTF-8 BOM).
-   - Impresión optimizada de reportes institucionales.
+1. **Frontend (Plataforma Web)**:
+   - Interfaz web institucional responsiva adaptada a dispositivos móviles y ordenadores de escritorio.
+   - Forzado de datos en **MAYÚSCULAS** a nivel de interfaz de usuario y capa de transporte.
+   - Compresión client-side integrada (Canvas) para optimizar fotografías capturadas desde smartphones.
+   - Proxy de API interno mediante función serverless (`/api/service`) para proteger las URLs y credenciales del servidor central.
+   - Exportación de reportes de auditoría en formato CSV/Excel con codificación UTF-8 BOM.
 
-2. **Backend & Base de Datos (Google Apps Script + Google Sheets)**:
-   - **ID del Spreadsheet (BD)**: `1qEEyduhUlRvFNhdg-fJPxJAcQVOYHwNVWORoet5BqEE`
-   - **URL del Web App (API)**: `https://script.google.com/macros/s/AKfycbyzY0V73VNkkrrHRwxCu_z2bSwmnEEDnEbjQwu81R4GYZLYHp3uo66vYgWDICAPinLR/exec`
-   - Almacenamiento seguro de fotografías en Google Drive en la carpeta `Inventario_Fotografias_Bienes` con enlaces públicos directos.
-   - Borrado lógico (*soft delete*) para trazabilidad de auditoría.
+2. **Backend & Base de Datos (Servidor Central)**:
+   - Persistencia estructurada en la Base de Datos Institucional.
+   - Endpoint seguro con funciones de sincronización unificada, registro, actualización y borrado lógico.
+   - Repositorio seguro para almacenamiento de fotografías con visualización directa.
 
 ---
 
-## 🗄️ Estructura de la Base de Datos (Google Sheets)
+## 🔐 Variables de Entorno
 
-El script cuenta con una función de auto-inicialización (`inicializarBaseDeDatos()`) que genera las siguientes 3 hojas estructuradas con formato institucional:
+Para desacoplar la URL del servidor central del frontend público, se utiliza la siguiente variable de entorno:
+
+| Variable | Descripción | Valor |
+| :--- | :--- | :--- |
+| **`BACKEND_API_URL`** | URL del Endpoint del Servidor Central | `https://script.google.com/macros/s/AKfycbyzY0V73VNkkrrHRwxCu_z2bSwmnEEDnEbjQwu81R4GYZLYHp3uo66vYgWDICAPinLR/exec` |
+
+### Configuración en la Plataforma de Despliegue:
+1. Dirígete a **Project Settings** > **Environment Variables**.
+2. Añade la clave `BACKEND_API_URL` con la URL de tu servidor central.
+3. Guarda y redespliega el proyecto. El proxy `/api/service` la leerá de forma automática y transparente.
+
+---
+
+## 🗄️ Estructura de la Base de Datos
+
+El sistema almacena toda la información de texto en **MAYÚSCULAS**:
 
 ### 1. Hoja `bienes` (Inventario de Bienes Tecnológicos)
-| Columna | Nombre de Campo | Descripción |
-| :---: | :--- | :--- |
-| **A** | `ID` | Identificador único institucional (`BN-YYYYMMDD-HHmmss`) |
-| **B** | `Fecha` | Marca temporal de registro |
-| **C** | `Departamento` | Departamento o Servicio del HCUAMP |
-| **D** | `Grupo` | Grupo del bien (Ej. 04) |
-| **E** | `SubGrupo` | Subgrupo del bien (Ej. 13) |
-| **F** | `Sección` | Sección o Identificación interna |
-| **G** | `Nro. de Bien` | Nro. completo (BN, BE o BT + código) |
-| **H** | `Descripción` | Denominación y detalle del bien |
-| **I** | `Características` | Tipo de equipo tecnológico |
-| **J** | `Modelo` | Modelo del equipo |
-| **K** | `Color` | Color del equipo |
-| **L** | `Serial` | Número de serie del fabricante |
-| **M** | `Estado` | Bueno, Regular o Inoperativo |
-| **N** | `URL` | Enlace directo a la fotografía en Google Drive |
-| **O** | `Estatus` | Activo o Inactivo (Borrado lógico) |
+- **Campos**: `ID`, `FECHA`, `DEPARTAMENTO`, `GRUPO`, `SUBGRUPO`, `SECCIÓN`, `NRO. DE BIEN`, `DESCRIPCIÓN`, `CARACTERÍSTICAS`, `MODELO`, `COLOR`, `SERIAL`, `ESTADO` (BUENO, REGULAR, INOPERATIVO), `URL`, `ESTATUS` (ACTIVO, INACTIVO).
 
 ### 2. Hoja `redes` (Infraestructura de Conectividad)
-| Columna | Nombre de Campo | Descripción |
-| :---: | :--- | :--- |
-| **A** | `ID` | Identificador único (`RED-YYYYMMDD-HHmmss`) |
-| **B** | `Modem (Cant)` | Cantidad de modems en el área |
-| **C** | `Router (Cant)` | Cantidad de routers |
-| **D** | `Switch (Cant)` | Cantidad de switches |
-| **E** | `Punto de Acceso (Cant)` | Cantidad de Access Points |
-| **F** | `Tipo de Cableado` | Cat5e, Cat6, Cat6A, Fibra Óptica, Inalámbrico |
-| **G** | `Canalización` | Sí / No |
-| **H** | `SSID Wi-Fi` | Nombre de la red inalámbrica |
-| **I** | `Banda Wi-Fi` | 2.4 GHz, 5 GHz, Dual |
-| **J** | `Proveedor` | Empresa de telecomunicaciones / enlace |
-| **K** | `Velocidad` | Ancho de banda contratado |
-| **L** | `Responsable de Pagos` | Área o persona encargada de la gestión |
-| **M** | `Estatus` | Activo o Inactivo |
+- **Campos**: `ID`, `MODEM (CANT)`, `ROUTER (CANT)`, `SWITCH (CANT)`, `PUNTO DE ACCESO (CANT)`, `TIPO DE CABLEADO`, `CANALIZACIÓN` (SÍ, NO), `SSID WI-FI`, `BANDA WI-FI`, `PROVEEDOR`, `VELOCIDAD`, `RESPONSABLE DE PAGOS`, `ESTATUS` (ACTIVO, INACTIVO).
 
 ### 3. Hoja `cuestionario_ofimatica` (Diagnóstico Institucional)
-| Columna | Nombre de Campo | Descripción |
-| :---: | :--- | :--- |
-| **A** | `Fecha / Hora` | Marca de tiempo de la evaluación |
-| **B** | `Nombre Completo` | Nombre del funcionario evaluado |
-| **C** | `Correo / Departamento` | Correo de contacto o área |
-| **D - E**| `Word Frecuencia / Nivel` | Frecuencia de uso y nivel percibido |
-| **F - G**| `Excel Frecuencia / Nivel` | Frecuencia de uso y nivel percibido |
-| **H - I**| `Slides Frecuencia / Nivel` | Frecuencia de uso y nivel percibido |
-| **J - K**| `Correo Frecuencia / Nivel` | Frecuencia de uso y nivel percibido |
-| **L - M**| `Nube Frecuencia / Nivel` | Frecuencia de uso y nivel percibido |
-| **N** | `Estatus` | Activo o Inactivo |
+- **Campos**: `FECHA / HORA`, `NOMBRE COMPLETO`, `CORREO / DEPARTAMENTO`, `PROCESADOR TEXTO FRECUENCIA / NIVEL`, `HOJAS CÁLCULO FRECUENCIA / NIVEL`, `PRESENTACIONES FRECUENCIA / NIVEL`, `CORREO FRECUENCIA / NIVEL`, `NUBE FRECUENCIA / NIVEL`, `ESTATUS` (ACTIVO, INACTIVO).
 
 ---
 
-## 🚀 Despliegue en Vercel
+## 🚀 Despliegue Manual en GitHub
 
-El proyecto está 100% preparado con `vercel.json`, `package.json` e `index.html`.
+Para subir manualmente los archivos al repositorio:
 
-### Opción 1: Despliegue Directo por CLI
-1. Abre tu terminal en este directorio y ejecuta:
-   ```bash
-   npx vercel login
-   ```
-2. Despliega a producción con:
-   ```bash
-   npx vercel --prod
-   ```
-
-### Opción 2: Conectar con GitHub a Vercel
-1. Sube este repositorio a tu cuenta de GitHub:
-   ```bash
-   git remote add origin https://github.com/TU_USUARIO/TU_REPOSITORIO.git
-   git branch -M main
-   git push -u origin main
-   ```
-2. Entra en [vercel.com/new](https://vercel.com/new), importa el repositorio y pulsa **Deploy**.
-   - No requiere configuración adicional de Build; Vercel detectará la aplicación estática optimizada de inmediato.
-
----
-
-## ⚙️ Pasos Finales en Google Apps Script
-
-Para asegurar que el Web App en `https://script.google.com/macros/s/AKfycbyzY0V73VNkkrrHRwxCu_z2bSwmnEEDnEbjQwu81R4GYZLYHp3uo66vYgWDICAPinLR/exec` aplique los cambios:
-
-1. Abre el editor de **Google Apps Script** asociado al proyecto.
-2. Copia todo el contenido del archivo [`Code.gs`](./Code.gs) y pégalo en el editor reemplazando el código existente.
-3. En el menú desplegable de funciones, selecciona `inicializarBaseDeDatos` y haz clic en **Ejecutar** (Run).
-   - Google te solicitará otorgar permisos para acceder a Google Sheets y Google Drive.
-   - Una vez ejecutado, verás en el Spreadsheet `1qEEyduhUlRvFNhdg-fJPxJAcQVOYHwNVWORoet5BqEE` que las tres hojas (`bienes`, `redes` y `cuestionario_ofimatica`) han sido creadas con cabeceras en azul institucional.
-4. Para publicar la versión activa del Web App:
-   - Haz clic en **Implementar (Deploy)** > **Gestionar implementaciones (Manage deployments)**.
-   - Haz clic en el icono del lápiz (**Editar**).
-   - En **Versión**, selecciona **Nueva versión**.
-   - Asegúrate de que en **Quién tiene acceso** esté seleccionado: **Cualquier usuario (Anyone)**.
-   - Haz clic en **Implementar**.
+1. Abre el repositorio en GitHub y haz clic en **Add file** > **Upload files**.
+2. Arrastra los archivos de la raíz del proyecto:
+   - `index.html`
+   - `vercel.json`
+   - `package.json`
+   - `api/service.js`
+   - `README.md`
+   - `Code.gs`
+   - `appsscript.json`
+   - `404.html`
+   - `.env.example`
+3. Confirma los cambios (**Commit changes**). La plataforma web desplegará la versión actualizada de forma automática.

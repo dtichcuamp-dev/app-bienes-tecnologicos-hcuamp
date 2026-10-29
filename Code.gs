@@ -3,13 +3,19 @@
  * SISTEMA INSTITUCIONAL DE CONTROL - BIENES TECNOLÓGICOS, REDES Y OFIMÁTICA
  * Hospital Central Universitario Dr. Antonio María Pineda (HCUAMP)
  *
- * Base de Datos: Google Sheets (ID: 1qEEyduhUlRvFNhdg-fJPxJAcQVOYHwNVWORoet5BqEE)
- * Web App Backend: https://script.google.com/macros/s/AKfycbyzY0V73VNkkrrHRwxCu_z2bSwmnEEDnEbjQwu81R4GYZLYHp3uo66vYgWDICAPinLR/exec
+ * Base de Datos Institucional: 1qEEyduhUlRvFNhdg-fJPxJAcQVOYHwNVWORoet5BqEE
+ * Endpoint de Servidor Central: AKfycbyzY0V73VNkkrrHRwxCu_z2bSwmnEEDnEbjQwu81R4GYZLYHp3uo66vYgWDICAPinLR
  * =========================================================================================
  */
 
 var SPREADSHEET_ID = "1qEEyduhUlRvFNhdg-fJPxJAcQVOYHwNVWORoet5BqEE";
 var FOLDER_NAME = "Inventario_Fotografias_Bienes";
+
+// Helper universal para convertir texto a MAYÚSCULAS
+function toUpper(str) {
+  if (str === null || str === undefined) return "";
+  return String(str).trim().toUpperCase();
+}
 
 // ================= CONEXIÓN CON SPREADSHEET =================
 function getSpreadsheet() {
@@ -36,7 +42,7 @@ function inicializarBaseDeDatos() {
 
     // 1. Hoja "bienes"
     var sheetBienes = ss.getSheetByName("bienes") || ss.insertSheet("bienes");
-    var headersBienes = ["ID", "Fecha", "Departamento", "Grupo", "SubGrupo", "Sección", "Nro. de Bien", "Descripción", "Características", "Modelo", "Color", "Serial", "Estado", "URL", "Estatus"];
+    var headersBienes = ["ID", "FECHA", "DEPARTAMENTO", "GRUPO", "SUBGRUPO", "SECCIÓN", "NRO. DE BIEN", "DESCRIPCIÓN", "CARACTERÍSTICAS", "MODELO", "COLOR", "SERIAL", "ESTADO", "URL", "ESTATUS"];
     if (sheetBienes.getLastRow() === 0) {
       sheetBienes.appendRow(headersBienes);
     } else {
@@ -51,7 +57,7 @@ function inicializarBaseDeDatos() {
 
     // 2. Hoja "redes"
     var sheetRedes = ss.getSheetByName("redes") || ss.insertSheet("redes");
-    var headersRedes = ["ID", "Modem (Cant)", "Router (Cant)", "Switch (Cant)", "Punto de Acceso (Cant)", "Tipo de Cableado", "Canalización", "SSID Wi-Fi", "Banda Wi-Fi", "Proveedor", "Velocidad", "Responsable de Pagos", "Estatus"];
+    var headersRedes = ["ID", "MODEM (CANT)", "ROUTER (CANT)", "SWITCH (CANT)", "PUNTO DE ACCESO (CANT)", "TIPO DE CABLEADO", "CANALIZACIÓN", "SSID WI-FI", "BANDA WI-FI", "PROVEEDOR", "VELOCIDAD", "RESPONSABLE DE PAGOS", "ESTATUS"];
     if (sheetRedes.getLastRow() === 0) {
       sheetRedes.appendRow(headersRedes);
     } else {
@@ -66,7 +72,7 @@ function inicializarBaseDeDatos() {
 
     // 3. Hoja "cuestionario_ofimatica"
     var sheetOfi = ss.getSheetByName("cuestionario_ofimatica") || ss.insertSheet("cuestionario_ofimatica");
-    var headersOfi = ["Fecha / Hora", "Nombre Completo", "Correo / Departamento", "Word Frecuencia", "Word Nivel", "Excel Frecuencia", "Excel Nivel", "Slides Frecuencia", "Slides Nivel", "Correo Frecuencia", "Correo Nivel", "Nube Frecuencia", "Nube Nivel", "Estatus"];
+    var headersOfi = ["FECHA / HORA", "NOMBRE COMPLETO", "CORREO / DEPARTAMENTO", "PROCESADOR TEXTO FRECUENCIA", "PROCESADOR TEXTO NIVEL", "HOJAS CÁLCULO FRECUENCIA", "HOJAS CÁLCULO NIVEL", "PRESENTACIONES FRECUENCIA", "PRESENTACIONES NIVEL", "CORREO FRECUENCIA", "CORREO NIVEL", "NUBE FRECUENCIA", "NUBE NIVEL", "ESTATUS"];
     if (sheetOfi.getLastRow() === 0) {
       sheetOfi.appendRow(headersOfi);
     } else {
@@ -87,7 +93,7 @@ function inicializarBaseDeDatos() {
 
     return {
       status: "success",
-      message: "Estructura de Base de Datos verificada e inicializada correctamente en Google Sheets.",
+      message: "Estructura de Base de Datos verificada e inicializada correctamente.",
       spreadsheetId: SPREADSHEET_ID,
       sheets: ["bienes", "redes", "cuestionario_ofimatica"]
     };
@@ -116,7 +122,7 @@ function doGet(e) {
     } catch (err) {
       return createJsonResponse({
         status: "success",
-        message: "API Web App HCUAMP Activa y Operativa",
+        message: "Servidor Central HCUAMP Activo y Operativo",
         spreadsheetId: SPREADSHEET_ID,
         endpoints: ["obtenerTodosLosBienes", "obtenerTodasLasRedes", "obtenerTodosLosDiagnosticos", "obtenerTodo", "init_db", "ping"]
       });
@@ -196,9 +202,13 @@ function doPost(e) {
         response = actualizarOfimatica(payload.sheetRow, payload.data || payload);
         break;
       case "eliminarFilaSheets":
+      case "desactivarRegistro":
+      case "eliminarRegistro":
         response = eliminarFilaSheets(payload.sheetName || payload.nombreHoja, payload.sheetRow);
         break;
       case "subirFotoADrive":
+      case "almacenarFoto":
+      case "subirFoto":
         response = subirFotoADrive(payload.base64Data, payload.fileName, payload.mimeType);
         break;
       case "init_db":
@@ -233,12 +243,12 @@ function obtenerTodosLosBienes() {
 
     for (var i = 0; i < data.length; i++) {
       var row = data[i];
-      var estatus = String(row[14] || "").trim(); // Columna O
-      if (estatus === "") estatus = "Activo";
+      var estatus = toUpper(row[14]);
+      if (estatus === "") estatus = "ACTIVO";
 
-      if (estatus.toLowerCase() !== "inactivo") {
-        var departamento = String(row[2] || "").trim();
-        var nroBien = String(row[6] || "").trim();
+      if (estatus !== "INACTIVO") {
+        var departamento = toUpper(row[2]);
+        var nroBien = toUpper(row[6]);
 
         if (departamento !== "" || nroBien !== "") {
           resultados.push({
@@ -246,16 +256,16 @@ function obtenerTodosLosBienes() {
             id: String(row[0] || ""),
             fecha: row[1] instanceof Date ? Utilities.formatDate(row[1], "America/Caracas", "yyyy-MM-dd HH:mm") : String(row[1] || ""),
             departamento: departamento,
-            grupo: String(row[3] || ""),
-            subgrupo: String(row[4] || ""),
-            seccion: String(row[5] || ""),
+            grupo: toUpper(row[3]),
+            subgrupo: toUpper(row[4]),
+            seccion: toUpper(row[5]),
             nroBienCompleto: nroBien,
-            descripcion: String(row[7] || ""),
-            caracteristicas: String(row[8] || ""),
-            modelo: String(row[9] || ""),
-            color: String(row[10] || ""),
-            serial: String(row[11] || ""),
-            estado: String(row[12] || "Bueno"),
+            descripcion: toUpper(row[7]),
+            caracteristicas: toUpper(row[8]),
+            modelo: toUpper(row[9]),
+            color: toUpper(row[10]),
+            serial: toUpper(row[11]),
+            estado: toUpper(row[12] || "BUENO"),
             fotoUrl: String(row[13] || ""),
             estatus: estatus
           });
@@ -272,7 +282,7 @@ function obtenerTodosLosBienes() {
 function guardarBien(data) {
   try {
     var ss = getSpreadsheet();
-    if (!ss) return { status: "error", message: "No se pudo conectar a Spreadsheet." };
+    if (!ss) return { status: "error", message: "No se pudo conectar al almacenamiento central." };
     var sheet = ss.getSheetByName("bienes");
     if (!sheet) {
       inicializarBaseDeDatos();
@@ -283,19 +293,19 @@ function guardarBien(data) {
     var rowData = [
       idGenerado,
       new Date(),
-      data.departamento || "",
-      data.grupo || "",
-      data.subgrupo || "",
-      data.seccion || "",
-      data.nroBienCompleto || "",
-      data.descripcion || "",
-      data.caracteristicas || "",
-      data.modelo || "",
-      data.color || "",
-      data.serial || "",
-      data.estado || "Bueno",
+      toUpper(data.departamento),
+      toUpper(data.grupo),
+      toUpper(data.subgrupo),
+      toUpper(data.seccion),
+      toUpper(data.nroBienCompleto),
+      toUpper(data.descripcion),
+      toUpper(data.caracteristicas),
+      toUpper(data.modelo),
+      toUpper(data.color),
+      toUpper(data.serial),
+      toUpper(data.estado || "BUENO"),
       data.fotoUrl || "",
-      "Activo"
+      "ACTIVO"
     ];
 
     sheet.appendRow(rowData);
@@ -308,28 +318,28 @@ function guardarBien(data) {
 function actualizarBien(sheetRow, data) {
   try {
     var ss = getSpreadsheet();
-    if (!ss) return { status: "error", message: "No se pudo conectar a Spreadsheet." };
+    if (!ss) return { status: "error", message: "No se pudo conectar al almacenamiento central." };
     var sheet = ss.getSheetByName("bienes");
     if (!sheet) return { status: "error", message: "No se encontró la hoja bienes." };
 
     var idActual = sheet.getRange(sheetRow, 1).getValue() || ("BN-" + Date.now());
     var fechaActual = sheet.getRange(sheetRow, 2).getValue() || new Date();
-    var estatusActual = sheet.getRange(sheetRow, 15).getValue() || "Activo";
+    var estatusActual = toUpper(sheet.getRange(sheetRow, 15).getValue()) || "ACTIVO";
 
     var rowData = [
       idActual,
       fechaActual,
-      data.departamento || "",
-      data.grupo || "",
-      data.subgrupo || "",
-      data.seccion || "",
-      data.nroBienCompleto || "",
-      data.descripcion || "",
-      data.caracteristicas || "",
-      data.modelo || "",
-      data.color || "",
-      data.serial || "",
-      data.estado || "Bueno",
+      toUpper(data.departamento),
+      toUpper(data.grupo),
+      toUpper(data.subgrupo),
+      toUpper(data.seccion),
+      toUpper(data.nroBienCompleto),
+      toUpper(data.descripcion),
+      toUpper(data.caracteristicas),
+      toUpper(data.modelo),
+      toUpper(data.color),
+      toUpper(data.serial),
+      toUpper(data.estado || "BUENO"),
       data.fotoUrl || "",
       estatusActual
     ];
@@ -355,11 +365,11 @@ function obtenerTodasLasRedes() {
 
     for (var i = 0; i < data.length; i++) {
       var row = data[i];
-      var estatus = String(row[12] || "").trim(); // Columna M
-      if (estatus === "") estatus = "Activo";
+      var estatus = toUpper(row[12]);
+      if (estatus === "") estatus = "ACTIVO";
 
-      if (estatus.toLowerCase() !== "inactivo") {
-        var ssid = String(row[7] || "").trim();
+      if (estatus !== "INACTIVO") {
+        var ssid = toUpper(row[7]);
         if (ssid !== "") {
           resultados.push({
             sheetRow: i + 2,
@@ -368,13 +378,13 @@ function obtenerTodasLasRedes() {
             router: Number(row[2]) || 0,
             switch: Number(row[3]) || 0,
             ap: Number(row[4]) || 0,
-            cableado: String(row[5] || ""),
-            canalizacion: String(row[6] || ""),
+            cableado: toUpper(row[5]),
+            canalizacion: toUpper(row[6]),
             ssid: ssid,
-            banda: String(row[8] || ""),
-            proveedor: String(row[9] || ""),
-            velocidad: String(row[10] || ""),
-            responsable: String(row[11] || ""),
+            banda: toUpper(row[8]),
+            proveedor: toUpper(row[9]),
+            velocidad: toUpper(row[10]),
+            responsable: toUpper(row[11]),
             estatus: estatus
           });
         }
@@ -390,7 +400,7 @@ function obtenerTodasLasRedes() {
 function guardarInfraestructuraRed(data) {
   try {
     var ss = getSpreadsheet();
-    if (!ss) return { status: "error", message: "No se pudo conectar a Spreadsheet." };
+    if (!ss) return { status: "error", message: "No se pudo conectar al almacenamiento central." };
     var sheet = ss.getSheetByName("redes");
     if (!sheet) {
       inicializarBaseDeDatos();
@@ -404,14 +414,14 @@ function guardarInfraestructuraRed(data) {
       Number(data.router) || 0,
       Number(data.switch) || 0,
       Number(data.ap) || 0,
-      data.cableado || "",
-      data.canalizacion || "",
-      data.ssid || "",
-      data.banda || "",
-      data.proveedor || "",
-      data.velocidad || "",
-      data.responsable || "",
-      "Activo"
+      toUpper(data.cableado),
+      toUpper(data.canalizacion),
+      toUpper(data.ssid),
+      toUpper(data.banda),
+      toUpper(data.proveedor),
+      toUpper(data.velocidad),
+      toUpper(data.responsable),
+      "ACTIVO"
     ];
 
     sheet.appendRow(rowData);
@@ -424,12 +434,12 @@ function guardarInfraestructuraRed(data) {
 function actualizarRed(sheetRow, data) {
   try {
     var ss = getSpreadsheet();
-    if (!ss) return { status: "error", message: "No se pudo conectar a Spreadsheet." };
+    if (!ss) return { status: "error", message: "No se pudo conectar al almacenamiento central." };
     var sheet = ss.getSheetByName("redes");
     if (!sheet) return { status: "error", message: "No se encontró la hoja redes." };
 
     var idActual = sheet.getRange(sheetRow, 1).getValue() || ("RED-" + Date.now());
-    var estatusActual = sheet.getRange(sheetRow, 13).getValue() || "Activo";
+    var estatusActual = toUpper(sheet.getRange(sheetRow, 13).getValue()) || "ACTIVO";
 
     var rowData = [
       idActual,
@@ -437,13 +447,13 @@ function actualizarRed(sheetRow, data) {
       Number(data.router) || 0,
       Number(data.switch) || 0,
       Number(data.ap) || 0,
-      data.cableado || "",
-      data.canalizacion || "",
-      data.ssid || "",
-      data.banda || "",
-      data.proveedor || "",
-      data.velocidad || "",
-      data.responsable || "",
+      toUpper(data.cableado),
+      toUpper(data.canalizacion),
+      toUpper(data.ssid),
+      toUpper(data.banda),
+      toUpper(data.proveedor),
+      toUpper(data.velocidad),
+      toUpper(data.responsable),
       estatusActual
     ];
 
@@ -468,23 +478,23 @@ function obtenerTodosLosDiagnosticos() {
 
     for (var i = 0; i < data.length; i++) {
       var row = data[i];
-      var estatus = String(row[13] || "").trim(); // Columna N
-      if (estatus === "") estatus = "Activo";
+      var estatus = toUpper(row[13]);
+      if (estatus === "") estatus = "ACTIVO";
 
-      if (estatus.toLowerCase() !== "inactivo") {
-        var nombre = String(row[1] || "").trim();
+      if (estatus !== "INACTIVO") {
+        var nombre = toUpper(row[1]);
         if (nombre !== "") {
           resultados.push({
             sheetRow: i + 2,
             fechaHora: row[0] instanceof Date ? Utilities.formatDate(row[0], "America/Caracas", "yyyy-MM-dd HH:mm") : String(row[0] || ""),
             nombre: nombre,
-            correo: String(row[2] || ""),
+            correo: toUpper(row[2]),
             tools: {
-              word: { frecuencia: String(row[3] || "-"), nivel: String(row[4] || "-") },
-              excel: { frecuencia: String(row[5] || "-"), nivel: String(row[6] || "-") },
-              slides: { frecuencia: String(row[7] || "-"), nivel: String(row[8] || "-") },
-              correo: { frecuencia: String(row[9] || "-"), nivel: String(row[10] || "-") },
-              nube: { frecuencia: String(row[11] || "-"), nivel: String(row[12] || "-") }
+              word: { frecuencia: toUpper(row[3] || "-"), nivel: toUpper(row[4] || "-") },
+              excel: { frecuencia: toUpper(row[5] || "-"), nivel: toUpper(row[6] || "-") },
+              slides: { frecuencia: toUpper(row[7] || "-"), nivel: toUpper(row[8] || "-") },
+              correo: { frecuencia: toUpper(row[9] || "-"), nivel: toUpper(row[10] || "-") },
+              nube: { frecuencia: toUpper(row[11] || "-"), nivel: toUpper(row[12] || "-") }
             },
             estatus: estatus
           });
@@ -501,7 +511,7 @@ function obtenerTodosLosDiagnosticos() {
 function guardarCuestionarioOfimatica(data) {
   try {
     var ss = getSpreadsheet();
-    if (!ss) return { status: "error", message: "No se pudo conectar a Spreadsheet." };
+    if (!ss) return { status: "error", message: "No se pudo conectar al almacenamiento central." };
     var sheet = ss.getSheetByName("cuestionario_ofimatica");
     if (!sheet) {
       inicializarBaseDeDatos();
@@ -511,19 +521,19 @@ function guardarCuestionarioOfimatica(data) {
     var tools = data.tools || {};
     var rowData = [
       new Date(),
-      data.nombre || "",
-      data.correo || "",
-      (tools.word && tools.word.frecuencia) || "",
-      (tools.word && tools.word.nivel) || "",
-      (tools.excel && tools.excel.frecuencia) || "",
-      (tools.excel && tools.excel.nivel) || "",
-      (tools.slides && tools.slides.frecuencia) || "",
-      (tools.slides && tools.slides.nivel) || "",
-      (tools.correo && tools.correo.frecuencia) || "",
-      (tools.correo && tools.correo.nivel) || "",
-      (tools.nube && tools.nube.frecuencia) || "",
-      (tools.nube && tools.nube.nivel) || "",
-      "Activo"
+      toUpper(data.nombre),
+      toUpper(data.correo),
+      toUpper(tools.word && tools.word.frecuencia),
+      toUpper(tools.word && tools.word.nivel),
+      toUpper(tools.excel && tools.excel.frecuencia),
+      toUpper(tools.excel && tools.excel.nivel),
+      toUpper(tools.slides && tools.slides.frecuencia),
+      toUpper(tools.slides && tools.slides.nivel),
+      toUpper(tools.correo && tools.correo.frecuencia),
+      toUpper(tools.correo && tools.correo.nivel),
+      toUpper(tools.nube && tools.nube.frecuencia),
+      toUpper(tools.nube && tools.nube.nivel),
+      "ACTIVO"
     ];
 
     sheet.appendRow(rowData);
@@ -536,28 +546,28 @@ function guardarCuestionarioOfimatica(data) {
 function actualizarOfimatica(sheetRow, data) {
   try {
     var ss = getSpreadsheet();
-    if (!ss) return { status: "error", message: "No se pudo conectar a Spreadsheet." };
+    if (!ss) return { status: "error", message: "No se pudo conectar al almacenamiento central." };
     var sheet = ss.getSheetByName("cuestionario_ofimatica");
     if (!sheet) return { status: "error", message: "No se encontró la hoja de ofimática." };
 
     var fechaActual = sheet.getRange(sheetRow, 1).getValue() || new Date();
-    var estatusActual = sheet.getRange(sheetRow, 14).getValue() || "Activo";
+    var estatusActual = toUpper(sheet.getRange(sheetRow, 14).getValue()) || "ACTIVO";
     var tools = data.tools || {};
 
     var rowData = [
       fechaActual,
-      data.nombre || "",
-      data.correo || "",
-      (tools.word && tools.word.frecuencia) || "",
-      (tools.word && tools.word.nivel) || "",
-      (tools.excel && tools.excel.frecuencia) || "",
-      (tools.excel && tools.excel.nivel) || "",
-      (tools.slides && tools.slides.frecuencia) || "",
-      (tools.slides && tools.slides.nivel) || "",
-      (tools.correo && tools.correo.frecuencia) || "",
-      (tools.correo && tools.correo.nivel) || "",
-      (tools.nube && tools.nube.frecuencia) || "",
-      (tools.nube && tools.nube.nivel) || "",
+      toUpper(data.nombre),
+      toUpper(data.correo),
+      toUpper(tools.word && tools.word.frecuencia),
+      toUpper(tools.word && tools.word.nivel),
+      toUpper(tools.excel && tools.excel.frecuencia),
+      toUpper(tools.excel && tools.excel.nivel),
+      toUpper(tools.slides && tools.slides.frecuencia),
+      toUpper(tools.slides && tools.slides.nivel),
+      toUpper(tools.correo && tools.correo.frecuencia),
+      toUpper(tools.correo && tools.correo.nivel),
+      toUpper(tools.nube && tools.nube.frecuencia),
+      toUpper(tools.nube && tools.nube.nivel),
       estatusActual
     ];
 
@@ -572,7 +582,7 @@ function actualizarOfimatica(sheetRow, data) {
 function eliminarFilaSheets(nombreHoja, sheetRow) {
   try {
     var ss = getSpreadsheet();
-    if (!ss) return { status: "error", message: "No se pudo conectar a Spreadsheet." };
+    if (!ss) return { status: "error", message: "No se pudo conectar al almacenamiento central." };
     var sheet = ss.getSheetByName(nombreHoja);
 
     if (sheet && sheetRow && sheetRow > 1) {
@@ -583,7 +593,7 @@ function eliminarFilaSheets(nombreHoja, sheetRow) {
         colEstatus = 14; // Columna N para "cuestionario_ofimatica"
       }
 
-      sheet.getRange(sheetRow, colEstatus).setValue("Inactivo");
+      sheet.getRange(sheetRow, colEstatus).setValue("INACTIVO");
       return { status: "success", message: "Registro marcado como inactivo correctamente." };
     }
     return { status: "error", message: "No se pudo localizar la fila o la hoja indicada (" + nombreHoja + ", fila " + sheetRow + ")." };
@@ -592,7 +602,7 @@ function eliminarFilaSheets(nombreHoja, sheetRow) {
   }
 }
 
-// ================= SUBIDA AUTOMÁTICA DE FOTOS A GOOGLE DRIVE =================
+// ================= SUBIDA AUTOMÁTICA DE FOTOS =================
 function subirFotoADrive(base64Data, fileName, mimeType) {
   try {
     if (!base64Data) {
@@ -614,7 +624,7 @@ function subirFotoADrive(base64Data, fileName, mimeType) {
     }
 
     var decodedData = Utilities.base64Decode(rawData);
-    var blobName = fileName || ("Bien_" + Date.now() + ".jpg");
+    var blobName = fileName || ("BIEN_" + Date.now() + ".jpg");
     var blobMime = mimeType || "image/jpeg";
     var blob = Utilities.newBlob(decodedData, blobMime, blobName);
 
@@ -631,6 +641,6 @@ function subirFotoADrive(base64Data, fileName, mimeType) {
       viewUrl: file.getUrl()
     };
   } catch (error) {
-    return { status: "error", message: "Error al subir a Google Drive: " + error.toString() };
+    return { status: "error", message: "Error al almacenar fotografía: " + error.toString() };
   }
 }

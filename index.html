@@ -430,6 +430,46 @@
         max-height: 38px;
       }
     }
+
+    /* Tarjeta de Perfil de Usuario en Cabecera (Alto Contraste y Legibilidad) */
+    .user-profile-card {
+      background-color: #ffffff !important;
+      border: 2px solid #93c5fd !important;
+      border-radius: 12px !important;
+      padding: 8px 16px !important;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18) !important;
+      min-width: 290px;
+      max-width: 100%;
+      transition: all 0.2s ease-in-out;
+    }
+    .user-profile-card:hover {
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25) !important;
+      border-color: #60a5fa !important;
+    }
+    .user-profile-name {
+      color: #0f172a !important; /* Azul marino oscuro de máxima legibilidad */
+      font-weight: 800 !important;
+      font-size: 0.88rem !important;
+      letter-spacing: 0.3px !important;
+      line-height: 1.25 !important;
+    }
+    .user-profile-role {
+      background-color: #1e3a8a !important; /* Azul institucional */
+      color: #ffffff !important;
+      font-size: 0.7rem !important;
+      font-weight: 800 !important;
+      letter-spacing: 0.5px !important;
+      padding: 3px 8px !important;
+      border-radius: 6px !important;
+      display: inline-block !important;
+    }
+    .user-profile-depto {
+      color: #334155 !important; /* Gris pizarra oscuro contrastado */
+      font-size: 0.72rem !important;
+      font-weight: 600 !important;
+      line-height: 1.2 !important;
+      margin-top: 2px !important;
+    }
   </style>
 </head>
 <body>
@@ -503,7 +543,11 @@
             </div>
             <div class="input-group">
               <span class="input-group-text bg-light text-primary"><i class="fa-solid fa-lock"></i></span>
-              <input type="password" class="form-control" id="loginPassword" placeholder="Ingrese su contraseña" required autocomplete="current-password">
+              <input type="password" class="form-control" id="loginPassword" placeholder="Contraseña (máx. 16 caracteres)" maxlength="16" required autocomplete="current-password">
+            </div>
+            <div class="d-flex justify-content-between mt-1">
+              <small class="text-muted" style="font-size: 0.72rem;"><i class="fa-solid fa-shield-halved me-1 text-primary"></i>Alfanumérico y caracteres especiales</small>
+              <small class="text-muted" style="font-size: 0.72rem;">Máx. 16 caracteres (Aa-Zz, 0-9)</small>
             </div>
           </div>
 
@@ -554,15 +598,15 @@
             <p class="mb-0 fw-semibold text-white" style="font-size: 0.88rem; letter-spacing: 0.2px;">Hospital Central Universitario Dr. Antonio María Pineda (HCUAMP) &bull; Dpto. de Tecnología, Información y Comunicación</p>
           </div>
           <div class="d-flex align-items-center gap-2 flex-wrap">
-            <!-- Perfil de Usuario Activo -->
-            <div class="d-flex align-items-center gap-2 bg-white bg-opacity-20 px-3 py-2 rounded-3 text-white border border-white border-opacity-25 shadow-sm" style="min-width: 280px;">
-              <i class="fa-solid fa-circle-user fa-2x text-info flex-shrink-0"></i>
+            <!-- Perfil de Usuario Activo (Alto Contraste y Máxima Legibilidad) -->
+            <div class="user-profile-card d-flex align-items-center gap-3">
+              <i class="fa-solid fa-circle-user fa-2x text-primary flex-shrink-0"></i>
               <div class="text-start" style="line-height: 1.25;">
-                <div class="fw-bold text-white text-uppercase" style="font-size: 0.85rem; letter-spacing: 0.3px;" id="headerUserDisplay">ADMINISTRADOR GENERAL DTIC</div>
+                <div class="user-profile-name text-uppercase" id="headerUserDisplay">ADMINISTRADOR GENERAL DTIC</div>
                 <div class="my-1">
-                  <span class="badge bg-warning text-dark px-2 py-0 fw-bold text-uppercase" style="font-size: 0.68rem; letter-spacing: 0.4px;" id="headerRoleBadge">ADMINISTRADOR</span>
+                  <span class="user-profile-role text-uppercase" id="headerRoleBadge">ADMINISTRADOR</span>
                 </div>
-                <div class="text-white-50 text-uppercase" style="font-size: 0.72rem; line-height: 1.2;" id="headerDeptoDisplay">DEPARTAMENTO DE TECNOLOGÍA, INFORMACIÓN Y COMUNICACIÓN (TIC)</div>
+                <div class="user-profile-depto text-uppercase" id="headerDeptoDisplay">DEPARTAMENTO DE TECNOLOGÍA, INFORMACIÓN Y COMUNICACIÓN (TIC)</div>
               </div>
             </div>
 
@@ -1781,7 +1825,8 @@
                   </div>
                   <div class="col-12 col-md-4">
                     <label for="adminPassword" class="form-label" id="lblAdminPassword">Contraseña Inicial *</label>
-                    <input type="password" class="form-control" id="adminPassword" placeholder="Contraseña de acceso" required>
+                    <input type="password" class="form-control" id="adminPassword" placeholder="Contraseña (máx. 16 caracteres)" maxlength="16" required>
+                    <small class="text-muted d-block mt-1" style="font-size: 0.72rem;"><i class="fa-solid fa-circle-info me-1"></i>Alfanumérico con caracteres especiales y mayúsculas/minúsculas (máx. 16).</small>
                     <small class="text-muted d-none" id="hintPasswordEdit">Dejar en blanco si desea conservar la contraseña actual.</small>
                   </div>
                   <div class="col-12 col-md-4">
@@ -1850,7 +1895,7 @@
         <p class="small text-muted mb-3">Por seguridad institucional, su sesión se ha suspendido tras un periodo de inactividad.</p>
         <form id="unlockForm" onsubmit="desbloquearSesion(event)">
           <div class="mb-3">
-            <input type="password" class="form-control" id="unlockPassword" placeholder="Ingrese su contraseña para reanudar" required autofocus>
+            <input type="password" class="form-control" id="unlockPassword" placeholder="Ingrese su contraseña (máx. 16 caracteres)" maxlength="16" required autofocus>
           </div>
           <div id="unlockAlert" class="alert alert-danger py-2 small d-none mb-3"></div>
           <button type="submit" class="btn btn-primary w-100 fw-bold mb-2"><i class="fa-solid fa-lock-open me-1"></i> Desbloquear Sesión</button>
@@ -2141,6 +2186,12 @@
         return;
       }
 
+      if (passInput.length > 16) {
+        alertBox.innerText = "La contraseña no debe exceder un máximo de 16 caracteres.";
+        alertBox.classList.remove('d-none');
+        return;
+      }
+
       if (captchaInput !== currentCaptcha) {
         alertBox.innerText = "Código de seguridad de verificación incorrecto. Intente de nuevo.";
         alertBox.classList.remove('d-none');
@@ -2250,6 +2301,12 @@
       unlockAlert.classList.add('d-none');
 
       if (!unlockPass) return;
+
+      if (unlockPass.length > 16) {
+        unlockAlert.innerText = "La contraseña no debe exceder un máximo de 16 caracteres.";
+        unlockAlert.classList.remove('d-none');
+        return;
+      }
 
       const hash = await hashSHA256Hex(unlockPass);
       try {
@@ -2477,6 +2534,10 @@
       const depto = toUpper(document.getElementById('adminDepartamento').value);
       const passwordPlain = document.getElementById('adminPassword').value;
 
+      if (passwordPlain && passwordPlain.length > 16) {
+        return alert("La contraseña no puede exceder el límite de 16 caracteres.");
+      }
+
       showLoading("Procesando usuario...", "Registrando en la base de datos institucional");
 
       try {
@@ -2559,6 +2620,29 @@
     document.addEventListener('DOMContentLoaded', () => {
       // Inicializar tooltips de ayuda
       initTooltips();
+
+      // Control estricto de captura:
+      // La contraseña es el único campo que permite mayúsculas, minúsculas, números y caracteres especiales (máx. 16 caracteres).
+      // Todos los demás campos de texto se convierten estrictamente a MAYÚSCULAS en tiempo real.
+      document.addEventListener('input', (e) => {
+        const target = e.target;
+        if (!target) return;
+        if (target.tagName === 'INPUT' && target.type !== 'password' && target.type !== 'file' && target.type !== 'checkbox' && target.type !== 'radio') {
+          const start = target.selectionStart;
+          const end = target.selectionEnd;
+          target.value = target.value.toUpperCase();
+          if (start !== null && end !== null) {
+            try { target.setSelectionRange(start, end); } catch (err) {}
+          }
+        } else if (target.tagName === 'TEXTAREA') {
+          const start = target.selectionStart;
+          const end = target.selectionEnd;
+          target.value = target.value.toUpperCase();
+          if (start !== null && end !== null) {
+            try { target.setSelectionRange(start, end); } catch (err) {}
+          }
+        }
+      });
 
       // Listeners de búsqueda
       if (searchInput) searchInput.addEventListener('input', filterData);

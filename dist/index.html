@@ -250,6 +250,8 @@
       body { background: white !important; font-size: 9pt; padding: 0; }
       .no-print { display: none !important; }
       .print-only { display: block !important; }
+      .top-institutional-banner { display: block !important; background: white !important; padding: 4px 0 !important; margin-bottom: 12px !important; border-bottom: 2px solid #334155 !important; }
+      .institutional-banner-img { max-width: 100% !important; max-height: 55px !important; }
       .card { box-shadow: none !important; border: 1px solid #ddd !important; }
       .table-container { box-shadow: none !important; border: none !important; }
       .table th { background-color: #eee !important; color: black !important; }
@@ -264,6 +266,169 @@
       .nav-pills .nav-link { font-size: 0.8rem; padding: 8px 12px; }
       .kpi-card { padding: 12px; }
       .kpi-card h3 { font-size: 1.4rem; }
+    }
+
+    /* Contención de Seguridad & Portal de Autenticación */
+    .auth-gateway-wrapper {
+      min-height: calc(100vh - 74px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at 50% 30%, #1e3a8a 0%, #0f172a 100%);
+      padding: 25px 15px;
+      position: relative;
+    }
+    .auth-card {
+      background: #ffffff;
+      border-radius: 18px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.45);
+      width: 100%;
+      max-width: 480px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      animation: fadeInCard 0.4s ease-out;
+    }
+    @keyframes fadeInCard {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .captcha-box {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 1.25rem;
+      font-weight: 800;
+      letter-spacing: 5px;
+      background: #e2e8f0;
+      color: #1e3a8a;
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: 1px dashed #94a3b8;
+      user-select: none;
+      text-shadow: 1px 1px 1px rgba(0,0,0,0.15);
+      display: inline-block;
+      min-width: 110px;
+      text-align: center;
+      text-decoration: line-through;
+    }
+
+    /* Servidor Central Conectado Status Badge */
+    .status-badge-connected {
+      background-color: #ecfdf5 !important;
+      color: #065f46 !important;
+      border: 1.5px solid #10b981 !important;
+      font-weight: 700 !important;
+      padding: 6px 14px !important;
+      border-radius: 50px !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 8px !important;
+      box-shadow: 0 2px 6px rgba(16, 185, 129, 0.2) !important;
+      font-size: 0.85rem !important;
+      letter-spacing: 0.3px !important;
+      transition: all 0.3s ease !important;
+    }
+    .status-badge-reconnecting {
+      background-color: #fffbeb !important;
+      color: #b45309 !important;
+      border-color: #f59e0b !important;
+      box-shadow: 0 2px 6px rgba(245, 158, 11, 0.2) !important;
+    }
+    .status-badge-header {
+      background: rgba(16, 185, 129, 0.2) !important;
+      color: #ffffff !important;
+      border: 1.5px solid rgba(52, 211, 153, 0.6) !important;
+      font-weight: 700 !important;
+      padding: 5px 12px !important;
+      border-radius: 50px !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 7px !important;
+      font-size: 0.8rem !important;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+    }
+    .status-indicator-dot {
+      width: 9px;
+      height: 9px;
+      background-color: #10b981;
+      border-radius: 50%;
+      display: inline-block;
+      box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+      animation: pulse-green 2s infinite;
+    }
+    .status-indicator-dot.reconnecting {
+      background-color: #f59e0b;
+      box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7);
+      animation: pulse-orange 2s infinite;
+    }
+    @keyframes pulse-green {
+      0% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+      }
+      70% {
+        transform: scale(1);
+        box-shadow: 0 0 0 7px rgba(16, 185, 129, 0);
+      }
+      100% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+      }
+    }
+    @keyframes pulse-orange {
+      0% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7);
+      }
+      70% {
+        transform: scale(1);
+        box-shadow: 0 0 0 7px rgba(245, 158, 11, 0);
+      }
+      100% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(245, 158, 11, 0);
+      }
+    }
+
+    /* Banner Superior Institucional (Cintillo Oficial Adaptativo) */
+    .top-institutional-banner {
+      background-color: #ffffff;
+      border-bottom: 2px solid #e2e8f0;
+      width: 100%;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04);
+      position: relative;
+      z-index: 1000;
+    }
+    .institutional-banner-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 6px 16px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .institutional-banner-img {
+      width: 100%;
+      max-width: 1350px;
+      height: auto;
+      max-height: 72px;
+      object-fit: contain;
+      display: block;
+      margin: 0 auto;
+    }
+    @media (max-width: 768px) {
+      .institutional-banner-container {
+        padding: 4px 8px;
+      }
+      .institutional-banner-img {
+        max-height: 50px;
+      }
+    }
+    @media (max-width: 480px) {
+      .institutional-banner-container {
+        padding: 3px 6px;
+      }
+      .institutional-banner-img {
+        max-height: 38px;
+      }
     }
   </style>
 </head>
@@ -290,34 +455,172 @@
     </div>
   </div>
 
-  <main class="container-fluid px-3 px-md-4 max-w-7xl" style="max-width: 1400px; margin: 0 auto;">
+  <!-- ================= BANNER SUPERIOR INSTITUCIONAL (CINTILLO ADAPTATIVO) ================= -->
+  <header class="top-institutional-banner" role="banner">
+    <div class="institutional-banner-container">
+      <img src="banner-superior.png" alt="Gobierno Bolivariano de Venezuela - Ministerio del Poder Popular para la Salud - Gobernación de Lara - Hospital Central Universitario Dr. Antonio María Pineda" class="institutional-banner-img">
+    </div>
+  </header>
 
-    <!-- CABECERA INSTITUCIONAL -->
-    <header class="app-header no-print">
-      <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2">
-        <div>
-          <div class="d-flex align-items-center gap-2 mb-1">
-            <i class="fa-solid fa-hospital-user fa-lg"></i>
-            <h1>Sistema Institucional de Control TIC</h1>
-          </div>
-          <p>Hospital Central Universitario Dr. Antonio María Pineda (HCUAMP) &bull; Dpto. de Tecnología, Información y Comunicación</p>
+  <!-- ================= PORTAL DE ACCESO Y CONTENCIÓN DE SEGURIDAD ================= -->
+  <div id="authGatewayContainer" class="auth-gateway-wrapper">
+    <div class="auth-card">
+      <!-- Cabecera de la Tarjeta de Acceso -->
+      <div class="bg-primary text-white p-4 text-center">
+        <div class="mb-2">
+          <i class="fa-solid fa-hospital-user fa-3x text-info"></i>
         </div>
-        <div class="d-flex align-items-center gap-2 flex-wrap">
-          <span class="badge bg-white bg-opacity-20 text-white badge-status">
-            <span class="status-dot"></span> Servidor Central Conectado
+        <h4 class="fw-bold mb-1">Sistema Institucional de Control TIC</h4>
+        <p class="small text-white-50 mb-2">Hospital Central Universitario Dr. Antonio María Pineda (HCUAMP)</p>
+        <div class="d-flex justify-content-center align-items-center gap-2 flex-wrap mt-1">
+          <span class="badge bg-white bg-opacity-20 text-white px-3 py-1 fw-normal" style="font-size: 0.75rem;">
+            <i class="fa-solid fa-shield-halved me-1 text-warning"></i> Contención de Seguridad Activa
           </span>
-          <button class="btn btn-sm btn-outline-light fw-bold px-2 px-md-3" data-bs-toggle="modal" data-bs-target="#manualUsuarioModal" title="Abrir Manual de Usuario Interactivo">
-            <i class="fa-solid fa-book-open-reader me-1"></i> Manual de Usuario
-          </button>
-          <button class="btn btn-sm btn-outline-light fw-bold px-2 px-md-3" data-bs-toggle="modal" data-bs-target="#basesLegalesModal" title="Consultar Bases Legales, Términos y Privacidad">
-            <i class="fa-solid fa-scale-balanced me-1"></i> Bases Legales
-          </button>
-          <button class="btn btn-sm btn-light fw-bold text-primary px-3" onclick="cargarTodoElSistema(true)" title="Sincronizar datos con el servidor central">
-            <i class="fa-solid fa-arrows-rotate me-1"></i> Sincronizar
-          </button>
+          <span class="badge text-white px-3 py-1 fw-bold shadow-sm d-inline-flex align-items-center gap-2" style="font-size: 0.75rem; background-color: #059669; border: 1px solid #34d399;">
+            <span class="status-indicator-dot" style="width: 7px; height: 7px; background-color: #ffffff; box-shadow: 0 0 0 0 rgba(255,255,255,0.7);"></span>
+            <span>Servidor Central Conectado</span>
+          </span>
         </div>
       </div>
-    </header>
+
+      <!-- Cuerpo del Formulario de Login -->
+      <div class="p-4">
+        <!-- Alerta de Notificación de Login -->
+        <div id="loginAlert" class="alert d-none py-2 small" role="alert"></div>
+
+        <form id="loginForm" autocomplete="on">
+          <div class="mb-3">
+            <label for="loginUsuario" class="form-label text-dark fw-bold small">Usuario Institucional *</label>
+            <div class="input-group">
+              <span class="input-group-text bg-light text-primary"><i class="fa-solid fa-user"></i></span>
+              <input type="text" class="form-control uppercase-input" id="loginUsuario" placeholder="EJ. ADMIN_TIC" required autocomplete="username" autofocus>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <label for="loginPassword" class="form-label text-dark fw-bold small mb-0">Contraseña *</label>
+              <button type="button" class="btn btn-link p-0 text-muted small text-decoration-none" onclick="togglePasswordVisibility('loginPassword', 'eyeIconLogin')">
+                <i class="fa-solid fa-eye me-1" id="eyeIconLogin"></i> Mostrar
+              </button>
+            </div>
+            <div class="input-group">
+              <span class="input-group-text bg-light text-primary"><i class="fa-solid fa-lock"></i></span>
+              <input type="password" class="form-control" id="loginPassword" placeholder="Ingrese su contraseña" required autocomplete="current-password">
+            </div>
+          </div>
+
+          <!-- Desafío de Verificación de Operador Humano (Captcha) -->
+          <div class="mb-3">
+            <label class="form-label text-dark fw-bold small d-block">Verificación de Operador *</label>
+            <div class="d-flex align-items-center gap-2">
+              <div id="captchaBox" class="captcha-box">7X9K</div>
+              <button type="button" class="btn btn-outline-secondary btn-sm py-2 px-3" onclick="generarNuevoCaptcha()" title="Generar nuevo código"><i class="fa-solid fa-rotate-right"></i></button>
+              <input type="text" class="form-control uppercase-input" id="loginCaptcha" placeholder="Código de 4 caracteres" maxlength="4" required autocomplete="off">
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="chkRecordarSesion" checked>
+              <label class="form-check-label text-muted small" for="chkRecordarSesion">Recordar sesión</label>
+            </div>
+            <a href="#basesLegalesModal" data-bs-toggle="modal" class="text-decoration-none small text-primary fw-semibold"><i class="fa-solid fa-scale-balanced me-1"></i>Bases Legales</a>
+          </div>
+
+          <button type="submit" class="btn btn-primary w-100 py-2 fw-bold shadow-sm" id="btnLoginSubmit">
+            <i class="fa-solid fa-right-to-bracket me-2"></i> Ingresar al Sistema
+          </button>
+        </form>
+
+        <!-- Orientación sobre Cuentas Autorizadas -->
+        <div class="mt-4 pt-3 border-top">
+          <div class="accordion accordion-flush" id="accAuthInfo">
+            <div class="accordion-item bg-transparent">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed py-2 px-0 bg-transparent small fw-semibold text-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAuthInfo">
+                  <i class="fa-solid fa-key me-2"></i> Credenciales Institucionales de Acceso
+                </button>
+              </h2>
+              <div id="collapseAuthInfo" class="accordion-collapse collapse" data-bs-parent="#accAuthInfo">
+                <div class="accordion-body px-0 py-2 small text-muted">
+                  <div class="p-2 border rounded bg-light">
+                    <p class="mb-1 fw-bold text-dark"><i class="fa-solid fa-circle-check text-success me-1"></i> Perfiles predeterminados autorizados:</p>
+                    <div class="mb-1">&bull; <strong>Administrador TIC:</strong> <code>ADMIN_TIC</code> &bull; Clave: <code>Hcuamp2026*TIC</code></div>
+                    <div>&bull; <strong>Operador / Pasante:</strong> <code>OPERADOR_TIC</code> &bull; Clave: <code>Unefa2026*TIC</code></div>
+                    <hr class="my-2">
+                    <small class="text-secondary d-block"><i class="fa-solid fa-info-circle me-1"></i> La administración de usuarios está reservada a la Jefatura DTIC.</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <p class="text-center text-muted mt-3 mb-0" style="font-size: 0.725rem;">
+          <i class="fa-solid fa-lock me-1"></i> Transmisión protegida mediante protocolos criptográficos TLS.<br>
+          Acceso exclusivo para personal autorizado &bull; HCUAMP 2026
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= LAYOUT PRINCIPAL DEL SISTEMA (Protegido por Autenticación) ================= -->
+  <div id="mainAppLayout" style="display: none;">
+
+    <main class="container-fluid px-3 px-md-4 max-w-7xl" style="max-width: 1400px; margin: 0 auto;">
+
+      <!-- CABECERA INSTITUCIONAL -->
+      <header class="app-header no-print">
+        <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-2">
+          <div>
+            <div class="d-flex align-items-center gap-2 mb-1">
+              <i class="fa-solid fa-hospital-user fa-lg"></i>
+              <h1>Sistema Institucional de Control TIC</h1>
+            </div>
+            <p>Hospital Central Universitario Dr. Antonio María Pineda (HCUAMP) &bull; Dpto. de Tecnología, Información y Comunicación</p>
+          </div>
+          <div class="d-flex align-items-center gap-2 flex-wrap">
+            <!-- Perfil de Usuario Activo -->
+            <div class="d-flex align-items-center gap-2 bg-white bg-opacity-20 px-3 py-1 rounded-pill text-white border border-white border-opacity-25 shadow-sm">
+              <i class="fa-solid fa-circle-user fa-lg text-info"></i>
+              <div class="text-start leading-tight">
+                <div class="fw-bold small" id="headerUserDisplay">ADMIN_TIC</div>
+                <div class="d-flex align-items-center gap-1">
+                  <span class="badge bg-warning text-dark py-0 px-2" style="font-size: 0.65rem;" id="headerRoleBadge">ADMINISTRADOR</span>
+                  <span class="d-none d-xl-inline text-white-50" style="font-size: 0.7rem;" id="headerDeptoDisplay">DTIC</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Indicador Servidor Central Conectado en Cabecera -->
+            <div class="status-badge-header d-none d-md-inline-flex" title="Conexión activa con el almacenamiento y base de datos institucional">
+              <span class="status-indicator-dot"></span>
+              <i class="fa-solid fa-server text-light"></i>
+              <span>Servidor Central Conectado</span>
+            </div>
+
+            <button class="btn btn-sm btn-outline-light fw-bold px-2 px-md-3" data-bs-toggle="modal" data-bs-target="#manualUsuarioModal" title="Abrir Manual de Usuario Interactivo">
+              <i class="fa-solid fa-book-open-reader me-1"></i> Manual
+            </button>
+            <button class="btn btn-sm btn-outline-light fw-bold px-2 px-md-3" data-bs-toggle="modal" data-bs-target="#basesLegalesModal" title="Consultar Bases Legales, Términos y Privacidad">
+              <i class="fa-solid fa-scale-balanced me-1"></i> Bases Legales
+            </button>
+            <button class="btn btn-sm btn-outline-warning fw-bold px-2 px-md-3" id="btnAuditoriaHeader" onclick="abrirModalAuditoria()" title="Ver Bitácora de Auditoría y Trazabilidad">
+              <i class="fa-solid fa-clock-rotate-left me-1"></i> Bitácora Logs
+            </button>
+            <button class="btn btn-sm btn-outline-info fw-bold px-2 px-md-3 d-none" id="btnUsuariosHeader" onclick="abrirModalUsuarios()" title="Administración de Usuarios">
+              <i class="fa-solid fa-users-gear me-1"></i> Usuarios
+            </button>
+            <button class="btn btn-sm btn-light fw-bold text-primary px-2 px-md-3" onclick="cargarTodoElSistema(true)" title="Sincronizar datos con el servidor central">
+              <i class="fa-solid fa-arrows-rotate me-1"></i> Sincronizar
+            </button>
+            <button class="btn btn-sm btn-danger fw-bold px-3" onclick="cerrarSesion()" title="Cerrar sesión de forma segura">
+              <i class="fa-solid fa-right-from-bracket me-1"></i> Salir
+            </button>
+          </div>
+        </div>
+      </header>
 
     <!-- BARRA SUPERIOR CON PESTAÑAS -->
     <div class="d-flex flex-wrap align-items-center justify-content-between mb-3 no-print">
@@ -338,8 +641,12 @@
           </button>
         </li>
       </ul>
-      <div class="mb-2 d-none d-md-block text-muted small">
-        <i class="fa-solid fa-server me-1 text-primary"></i> Servidor Institucional HCUAMP &bull; Modo Alta Disponibilidad
+      <div class="mb-2 d-flex align-items-center">
+        <div class="status-badge-connected" id="serverStatusBadge" title="Servidor Central Conectado - Base de Datos Institucional en Línea">
+          <span class="status-indicator-dot"></span>
+          <i class="fa-solid fa-server text-success"></i>
+          <span>Servidor Central Conectado</span>
+        </div>
       </div>
     </div>
 
@@ -1393,6 +1700,195 @@
     </div>
   </div>
 
+  <!-- ================= MODAL: BITÁCORA Y LOGS DE AUDITORÍA ================= -->
+  <div class="modal fade" id="bitacoraModal" tabindex="-1" aria-labelledby="bitacoraModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content border-0 shadow-lg">
+        <div class="modal-header bg-dark text-white py-3">
+          <div class="d-flex align-items-center gap-2">
+            <i class="fa-solid fa-clock-rotate-left fa-lg text-warning"></i>
+            <div>
+              <h5 class="modal-title fw-bold mb-0" id="bitacoraModalLabel">Bitácora de Auditoría y Trazabilidad de Usuarios</h5>
+              <small class="text-white-50">Registro cronológico inmutable de todas las operaciones realizadas en el sistema HCUAMP</small>
+            </div>
+          </div>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body p-3 p-md-4">
+          <!-- Filtros de Bitácora -->
+          <div class="row g-2 align-items-center mb-3">
+            <div class="col-12 col-md-5">
+              <div class="input-group">
+                <span class="input-group-text bg-white border-end-0"><i class="fa-solid fa-magnifying-glass text-muted"></i></span>
+                <input type="text" id="searchLogInput" class="form-control border-start-0 uppercase-input" placeholder="Buscar por usuario, acción, detalle o IP..." oninput="filtrarLogs()">
+              </div>
+            </div>
+            <div class="col-6 col-md-3">
+              <select class="form-select" id="filterModuloLog" onchange="filtrarLogs()">
+                <option value="">Todos los Módulos</option>
+                <option value="AUTENTICACIÓN">AUTENTICACIÓN</option>
+                <option value="BIENES">BIENES TECNOLÓGICOS</option>
+                <option value="REDES">INFRAESTRUCTURA DE RED</option>
+                <option value="OFIMATICA">DIAGNÓSTICO OFIMÁTICA</option>
+                <option value="USUARIOS">GESTIÓN DE USUARIOS</option>
+                <option value="REPORTES">REPORTES Y EXPORTACIÓN</option>
+                <option value="SISTEMA">SISTEMA GENERAL</option>
+              </select>
+            </div>
+            <div class="col-6 col-md-4 text-end d-flex gap-2 justify-content-end">
+              <button class="btn btn-outline-success btn-sm fw-bold" onclick="exportarCSVLogs()"><i class="fa-solid fa-file-excel me-1"></i> Exportar CSV</button>
+              <button class="btn btn-primary btn-sm fw-bold" onclick="cargarLogsAuditoria(true)"><i class="fa-solid fa-rotate me-1"></i> Actualizar</button>
+            </div>
+          </div>
+
+          <!-- Tabla de Logs -->
+          <div class="table-container p-2" style="max-height: 520px; overflow-y: auto;">
+            <table class="table table-hover table-sm align-middle mb-0" id="logsTable">
+              <thead>
+                <tr>
+                  <th>Fecha / Hora</th>
+                  <th>Usuario</th>
+                  <th>Rol</th>
+                  <th>Acción</th>
+                  <th>Módulo</th>
+                  <th>Detalle Operacional</th>
+                  <th>IP Origen</th>
+                  <th>Estatus</th>
+                </tr>
+              </thead>
+              <tbody id="logsTableBody"></tbody>
+            </table>
+            <div id="emptyLogsMessage" class="text-center p-4 text-muted d-none">
+              <i class="fa-solid fa-clock-rotate-left fa-2x mb-2 text-secondary"></i>
+              <p class="mb-0">No se encontraron registros de auditoría.</p>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer py-2 bg-light">
+          <small class="text-muted me-auto"><i class="fa-solid fa-shield-halved me-1 text-primary"></i> Todos los registros quedan asegurados bajo la Ley de Infogobierno y SUDEBIP.</small>
+          <button type="button" class="btn btn-secondary btn-sm px-4 fw-semibold" data-bs-dismiss="modal">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL: GESTIÓN DE USUARIOS INSTITUCIONALES ================= -->
+  <div class="modal fade" id="gestionUsuariosModal" tabindex="-1" aria-labelledby="gestionUsuariosModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content border-0 shadow-lg">
+        <div class="modal-header bg-primary text-white py-3">
+          <div class="d-flex align-items-center gap-2">
+            <i class="fa-solid fa-users-gear fa-lg"></i>
+            <div>
+              <h5 class="modal-title fw-bold mb-0" id="gestionUsuariosModalLabel">Gestión y Control de Usuarios Institucionales</h5>
+              <small class="text-white-50">Administración de cuentas autorizadas &bull; HCUAMP</small>
+            </div>
+          </div>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body p-3 p-md-4">
+          <!-- Formulario de Creación / Edición de Usuario -->
+          <div class="card mb-4 border bg-light">
+            <div class="card-body p-3">
+              <h6 class="fw-bold text-primary mb-3" id="userFormTitle"><i class="fa-solid fa-user-plus me-2"></i>Registrar Nuevo Usuario</h6>
+              <form id="userAdminForm" class="needs-validation" novalidate>
+                <input type="hidden" id="editingUserRow" value="">
+                <div class="row g-3">
+                  <div class="col-12 col-md-4">
+                    <label for="adminNombreCompleto" class="form-label">Nombre y Apellido *</label>
+                    <input type="text" class="form-control uppercase-input" id="adminNombreCompleto" placeholder="EJ. LCDO. JOSÉ HERNÁNDEZ" required>
+                  </div>
+                  <div class="col-12 col-md-4">
+                    <label for="adminCorreo" class="form-label">Correo Electrónico Institucional *</label>
+                    <input type="email" class="form-control uppercase-input" id="adminCorreo" placeholder="EJ. JOSE.HERNANDEZ@HCUAMP.GOB.VE" required>
+                  </div>
+                  <div class="col-12 col-md-4">
+                    <label for="adminUsuario" class="form-label">Usuario de Acceso *</label>
+                    <input type="text" class="form-control uppercase-input" id="adminUsuario" placeholder="EJ. JHERNANDEZ_TIC" required>
+                  </div>
+                  <div class="col-12 col-md-4">
+                    <label for="adminPassword" class="form-label" id="lblAdminPassword">Contraseña Inicial *</label>
+                    <input type="password" class="form-control" id="adminPassword" placeholder="Contraseña de acceso" required>
+                    <small class="text-muted d-none" id="hintPasswordEdit">Dejar en blanco si desea conservar la contraseña actual.</small>
+                  </div>
+                  <div class="col-12 col-md-4">
+                    <label for="adminRol" class="form-label">Rol y Nivel de Acceso *</label>
+                    <select class="form-select uppercase-input" id="adminRol" required>
+                      <option value="" selected disabled>Seleccione rol...</option>
+                      <option value="ADMINISTRADOR">ADMINISTRADOR (ACCESO TOTAL)</option>
+                      <option value="OPERADOR">OPERADOR (CAPTURA Y EDICIÓN)</option>
+                      <option value="AUDITOR">AUDITOR (SOLO LECTURA Y REPORTES)</option>
+                    </select>
+                  </div>
+                  <div class="col-12 col-md-4">
+                    <label for="adminDepartamento" class="form-label">Departamento *</label>
+                    <input type="text" class="form-control uppercase-input" id="adminDepartamento" placeholder="EJ. DEPARTAMENTO DE TECNOLOGÍA (TIC)" value="DEPARTAMENTO DE TECNOLOGÍA, INFORMACIÓN Y COMUNICACIÓN (TIC)" required>
+                  </div>
+                  <div class="col-12 text-end">
+                    <button type="button" class="btn btn-outline-secondary btn-sm me-2" onclick="limpiarFormularioUsuario()"><i class="fa-solid fa-eraser me-1"></i> Cancelar</button>
+                    <button type="submit" class="btn btn-primary btn-sm px-4 fw-bold shadow-sm" id="btnGuardarUsuarioSubmit"><i class="fa-solid fa-floppy-disk me-1"></i> Guardar Usuario</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <!-- Tabla de Usuarios Registrados -->
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <h6 class="fw-bold text-dark mb-0"><i class="fa-solid fa-users me-2 text-primary"></i>Usuarios Registrados en el Servidor Central</h6>
+            <button class="btn btn-outline-primary btn-sm" onclick="cargarUsuarios(true)"><i class="fa-solid fa-rotate me-1"></i> Actualizar Lista</button>
+          </div>
+          <div class="table-container p-2">
+            <table class="table table-hover align-middle mb-0" id="usersTable">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Nombre Completo</th>
+                  <th>Usuario</th>
+                  <th>Correo</th>
+                  <th>Rol</th>
+                  <th>Departamento</th>
+                  <th>Estatus</th>
+                  <th>Último Acceso</th>
+                  <th class="text-center">Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="usersTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="modal-footer py-2 bg-light">
+          <button type="button" class="btn btn-secondary btn-sm px-4 fw-semibold" data-bs-dismiss="modal">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL: BLOQUEO POR INACTIVIDAD ================= -->
+  <div class="modal fade" id="sessionLockModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="max-width: 400px;">
+      <div class="modal-content border-0 shadow-lg text-center p-4">
+        <div class="mb-3">
+          <div class="bg-warning bg-opacity-10 text-warning d-inline-flex p-3 rounded-circle">
+            <i class="fa-solid fa-user-lock fa-2x"></i>
+          </div>
+        </div>
+        <h5 class="fw-bold mb-1">Sesión Bloqueada por Inactividad</h5>
+        <p class="small text-muted mb-3">Por seguridad institucional, su sesión se ha suspendido tras un periodo de inactividad.</p>
+        <form id="unlockForm" onsubmit="desbloquearSesion(event)">
+          <div class="mb-3">
+            <input type="password" class="form-control" id="unlockPassword" placeholder="Ingrese su contraseña para reanudar" required autofocus>
+          </div>
+          <div id="unlockAlert" class="alert alert-danger py-2 small d-none mb-3"></div>
+          <button type="submit" class="btn btn-primary w-100 fw-bold mb-2"><i class="fa-solid fa-lock-open me-1"></i> Desbloquear Sesión</button>
+          <button type="button" class="btn btn-link text-danger text-decoration-none small" onclick="cerrarSesion(false)"><i class="fa-solid fa-right-from-bracket me-1"></i> Salir a la Pantalla Principal</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  </div> <!-- FIN DE #mainAppLayout -->
+
   <!-- SCRIPTS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -1413,6 +1909,18 @@
     let editingBienRow = null;
     let editingRedRow = null;
     let editingOfiRow = null;
+
+    // Estado de Seguridad y Autenticación
+    let currentUser = null;
+    let sessionToken = null;
+    let currentCaptcha = '';
+    let failedLoginAttempts = 0;
+    let inactivityTimer = null;
+    const INACTIVITY_TIMEOUT = 30 * 60 * 1000; // 30 minutos de inactividad
+
+    let auditLogsCache = [];
+    let userAccountsCache = [];
+    let editingUserRow = null;
 
     // Helper universal para mayúsculas
     function toUpper(str) {
@@ -1436,8 +1944,64 @@
     const searchNetworkInput = document.getElementById('searchNetworkInput');
     const searchOfimaticaInput = document.getElementById('searchOfimaticaInput');
 
+    // ================= FUNCIONES DE SEGURIDAD Y CRIPTOGRAFÍA =================
+    async function hashSHA256Hex(plainText) {
+      if (!plainText) return '';
+      try {
+        const msgBuffer = new TextEncoder().encode(plainText);
+        const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        return hashArray.map(b => b.toString(16).padStart(2, '0')).join('').toUpperCase();
+      } catch (e) {
+        let hash = 0;
+        for (let i = 0; i < plainText.length; i++) {
+          hash = ((hash << 5) - hash) + plainText.charCodeAt(i);
+          hash |= 0;
+        }
+        return Math.abs(hash).toString(16).toUpperCase();
+      }
+    }
+
+    function generarNuevoCaptcha() {
+      const chars = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ';
+      let code = '';
+      for (let i = 0; i < 4; i++) {
+        code += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      currentCaptcha = code;
+      const box = document.getElementById('captchaBox');
+      if (box) box.innerText = code;
+      const input = document.getElementById('loginCaptcha');
+      if (input) input.value = '';
+    }
+
+    function togglePasswordVisibility(inputId, iconId) {
+      const input = document.getElementById(inputId);
+      const icon = document.getElementById(iconId);
+      if (!input || !icon) return;
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+      } else {
+        input.type = 'password';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+      }
+    }
+
     // ================= CAPA DE COMUNICACIÓN CON EL BACKEND =================
     async function apiRequest(action, payload = null, method = 'POST') {
+      let requestPayload = payload || {};
+      if (typeof requestPayload === 'object' && !Array.isArray(requestPayload)) {
+        if (!requestPayload.solicitante && currentUser) {
+          requestPayload.solicitante = currentUser.usuario;
+        }
+        if (!requestPayload.token && sessionToken) {
+          requestPayload.token = sessionToken;
+        }
+      }
+
       // 1. Si se ejecuta dentro del contenedor nativo:
       if (typeof window !== 'undefined' && window['google'] && window['google']['script'] && window['google']['script']['run']) {
         return new Promise((resolve, reject) => {
@@ -1446,11 +2010,11 @@
             .withFailureHandler(err => reject(err));
           
           if (typeof runner[action] === 'function') {
-            if (payload !== null) {
-              if (Array.isArray(payload)) {
-                runner[action](...payload);
+            if (requestPayload !== null) {
+              if (Array.isArray(requestPayload)) {
+                runner[action](...requestPayload);
               } else {
-                runner[action](payload);
+                runner[action](requestPayload);
               }
             } else {
               runner[action]();
@@ -1475,16 +2039,18 @@
 
           if (method === 'GET') {
             url += `?action=${encodeURIComponent(action)}`;
-            if (payload && typeof payload === 'object') {
-              for (const key in payload) {
-                url += `&${encodeURIComponent(key)}=${encodeURIComponent(payload[key])}`;
+            if (requestPayload && typeof requestPayload === 'object') {
+              for (const key in requestPayload) {
+                if (requestPayload[key] !== undefined && requestPayload[key] !== null) {
+                  url += `&${encodeURIComponent(key)}=${encodeURIComponent(requestPayload[key])}`;
+                }
               }
             }
             options.method = 'GET';
           } else {
             options.method = 'POST';
             options.headers = { 'Content-Type': 'text/plain;charset=utf-8' };
-            const bodyData = { action: action, ...(payload || {}) };
+            const bodyData = { action: action, ...(requestPayload || {}) };
             options.body = JSON.stringify(bodyData);
           }
 
@@ -1504,6 +2070,503 @@
       }
     }
 
+    // ================= GESTIÓN DE SESIÓN Y AUTENTICACIÓN =================
+    function verificarSesionExistente() {
+      try {
+        const storedUser = localStorage.getItem('hcuamp_user_session') || sessionStorage.getItem('hcuamp_user_session');
+        const storedToken = localStorage.getItem('hcuamp_user_token') || sessionStorage.getItem('hcuamp_user_token');
+        if (storedUser && storedToken) {
+          const userObj = JSON.parse(storedUser);
+          aplicarSesionUsuario(userObj, storedToken, false);
+          return true;
+        }
+      } catch (e) {
+        console.warn("Sesión previa no válida:", e);
+      }
+      mostrarPantallaLogin();
+      return false;
+    }
+
+    function mostrarPantallaLogin() {
+      currentUser = null;
+      sessionToken = null;
+      document.getElementById('authGatewayContainer').classList.remove('d-none');
+      document.getElementById('mainAppLayout').style.display = 'none';
+      generarNuevoCaptcha();
+    }
+
+    function aplicarSesionUsuario(user, token, guardarEnStorage = true, recordar = true) {
+      currentUser = user;
+      sessionToken = token;
+
+      if (guardarEnStorage) {
+        const storage = recordar ? localStorage : sessionStorage;
+        storage.setItem('hcuamp_user_session', JSON.stringify(user));
+        storage.setItem('hcuamp_user_token', token);
+      }
+
+      // Actualizar cabecera con perfil de usuario
+      const displayEl = document.getElementById('headerUserDisplay');
+      const badgeEl = document.getElementById('headerRoleBadge');
+      const deptoEl = document.getElementById('headerDeptoDisplay');
+      if (displayEl) displayEl.innerText = toUpper(user.nombreCompleto || user.usuario);
+      if (badgeEl) badgeEl.innerText = toUpper(user.rol);
+      if (deptoEl) deptoEl.innerText = toUpper(user.departamento || 'TIC');
+
+      // Botón de Usuarios accesible únicamente por ADMINISTRADOR
+      const btnUsuarios = document.getElementById('btnUsuariosHeader');
+      if (btnUsuarios) {
+        if (toUpper(user.rol) === 'ADMINISTRADOR') {
+          btnUsuarios.classList.remove('d-none');
+        } else {
+          btnUsuarios.classList.add('d-none');
+        }
+      }
+
+      // Ocultar login y mostrar dashboard
+      document.getElementById('authGatewayContainer').classList.add('d-none');
+      document.getElementById('mainAppLayout').style.display = 'block';
+
+      // Activar monitor de inactividad
+      iniciarMonitorInactividad();
+
+      // Cargar datos del sistema
+      cargarTodoElSistema();
+    }
+
+    async function ejecutarLogin(event) {
+      if (event) event.preventDefault();
+      const alertBox = document.getElementById('loginAlert');
+      alertBox.className = 'alert alert-danger py-2 small mb-3';
+      alertBox.classList.add('d-none');
+
+      // Verificación de bloqueo temporal
+      const lockoutStored = localStorage.getItem('hcuamp_lockout_until');
+      if (lockoutStored && parseInt(lockoutStored) > Date.now()) {
+        const remainingSec = Math.ceil((parseInt(lockoutStored) - Date.now()) / 1000);
+        alertBox.innerText = `Acceso bloqueado por intentos fallidos. Espere ${remainingSec} segundos.`;
+        alertBox.classList.remove('d-none');
+        return;
+      }
+
+      const userInput = (document.getElementById('loginUsuario').value || '').trim();
+      const passInput = (document.getElementById('loginPassword').value || '');
+      const captchaInput = (document.getElementById('loginCaptcha').value || '').trim().toUpperCase();
+      const rememberMe = document.getElementById('chkRecordarSesion').checked;
+
+      if (!userInput || !passInput) {
+        alertBox.innerText = "Por favor ingrese su usuario institucional y contraseña.";
+        alertBox.classList.remove('d-none');
+        return;
+      }
+
+      if (captchaInput !== currentCaptcha) {
+        alertBox.innerText = "Código de seguridad de verificación incorrecto. Intente de nuevo.";
+        alertBox.classList.remove('d-none');
+        generarNuevoCaptcha();
+        return;
+      }
+
+      const loginBtn = document.getElementById('btnLoginSubmit');
+      const originalText = loginBtn.innerHTML;
+      loginBtn.disabled = true;
+      loginBtn.innerHTML = `<span class="spinner-border spinner-border-sm me-2"></span>Verificando seguridad...`;
+
+      try {
+        const passwordHash = await hashSHA256Hex(passInput);
+        const res = await apiRequest("loginUsuario", {
+          usuario: toUpper(userInput),
+          password: passInput,
+          passwordHash: passwordHash
+        });
+
+        if (res && res.status === 'success' && res.user) {
+          failedLoginAttempts = 0;
+          localStorage.removeItem('hcuamp_lockout_until');
+          aplicarSesionUsuario(res.user, res.token, true, rememberMe);
+          showNotification(`Bienvenido(a), ${res.user.nombreCompleto} (${res.user.rol})`, true);
+        } else {
+          failedLoginAttempts++;
+          if (failedLoginAttempts >= 5) {
+            const lockoutUntil = Date.now() + (3 * 60 * 1000);
+            localStorage.setItem('hcuamp_lockout_until', lockoutUntil.toString());
+            alertBox.innerText = "Demasiados intentos fallidos. Acceso bloqueado por 3 minutos por seguridad institucional.";
+          } else {
+            alertBox.innerText = (res && res.message) || `Credenciales incorrectas. Intentos restantes: ${5 - failedLoginAttempts}`;
+          }
+          alertBox.classList.remove('d-none');
+          generarNuevoCaptcha();
+        }
+      } catch (err) {
+        console.error("Error en autenticación:", err);
+        alertBox.innerText = "Error en la verificación de seguridad. Verifique la conexión con el servidor.";
+        alertBox.classList.remove('d-none');
+        generarNuevoCaptcha();
+      } finally {
+        loginBtn.disabled = false;
+        loginBtn.innerHTML = originalText;
+      }
+    }
+
+    async function cerrarSesion(confirmar = true) {
+      if (confirmar && !confirm("¿Está seguro de que desea cerrar la sesión institucional?")) return;
+
+      try {
+        if (currentUser) {
+          await apiRequest("registrarLog", {
+            usuario: currentUser.usuario,
+            rol: currentUser.rol,
+            accion: "CIERRE_SESION",
+            modulo: "AUTENTICACIÓN",
+            detalle: `Sesión finalizada por el usuario ${currentUser.usuario}`
+          });
+        }
+      } catch (e) {}
+
+      localStorage.removeItem('hcuamp_user_session');
+      localStorage.removeItem('hcuamp_user_token');
+      sessionStorage.removeItem('hcuamp_user_session');
+      sessionStorage.removeItem('hcuamp_user_token');
+
+      const lockModalEl = document.getElementById('sessionLockModal');
+      const lockModal = bootstrap.Modal.getInstance(lockModalEl);
+      if (lockModal) lockModal.hide();
+
+      currentUser = null;
+      sessionToken = null;
+      document.getElementById('loginPassword').value = '';
+      document.getElementById('loginCaptcha').value = '';
+      mostrarPantallaLogin();
+      showNotification("Sesión finalizada de manera segura.", true);
+    }
+
+    function iniciarMonitorInactividad() {
+      const resetInactivity = () => {
+        if (!currentUser) return;
+        clearTimeout(inactivityTimer);
+        inactivityTimer = setTimeout(bloquearPorInactividad, INACTIVITY_TIMEOUT);
+      };
+
+      ['mousemove', 'keydown', 'mousedown', 'touchstart', 'scroll'].forEach(evt => {
+        window.addEventListener(evt, resetInactivity, { passive: true });
+      });
+
+      resetInactivity();
+    }
+
+    function bloquearPorInactividad() {
+      if (!currentUser) return;
+      document.getElementById('unlockAlert').classList.add('d-none');
+      document.getElementById('unlockPassword').value = '';
+      const lockModal = new bootstrap.Modal(document.getElementById('sessionLockModal'), { backdrop: 'static', keyboard: false });
+      lockModal.show();
+    }
+
+    async function desbloquearSesion(event) {
+      if (event) event.preventDefault();
+      const unlockPass = document.getElementById('unlockPassword').value;
+      const unlockAlert = document.getElementById('unlockAlert');
+      unlockAlert.classList.add('d-none');
+
+      if (!unlockPass) return;
+
+      const hash = await hashSHA256Hex(unlockPass);
+      try {
+        const res = await apiRequest("loginUsuario", {
+          usuario: currentUser.usuario,
+          password: unlockPass,
+          passwordHash: hash
+        });
+
+        if (res && res.status === 'success') {
+          const lockModalEl = document.getElementById('sessionLockModal');
+          const lockModal = bootstrap.Modal.getInstance(lockModalEl);
+          if (lockModal) lockModal.hide();
+          showNotification("Sesión reanudada satisfactoriamente.", true);
+          iniciarMonitorInactividad();
+        } else {
+          unlockAlert.innerText = "Contraseña incorrecta. Intente nuevamente.";
+          unlockAlert.classList.remove('d-none');
+        }
+      } catch (err) {
+        unlockAlert.innerText = "Error validando credenciales: " + err.message;
+        unlockAlert.classList.remove('d-none');
+      }
+    }
+
+    // ================= BITÁCORA Y LOGS DE AUDITORÍA =================
+    async function abrirModalAuditoria() {
+      const modal = new bootstrap.Modal(document.getElementById('bitacoraModal'));
+      modal.show();
+      await cargarLogsAuditoria();
+    }
+
+    async function cargarLogsAuditoria(esRecarga = false) {
+      const tbody = document.getElementById('logsTableBody');
+      const emptyMsg = document.getElementById('emptyLogsMessage');
+      tbody.innerHTML = '<tr><td colspan="8" class="text-center py-4"><span class="spinner-border spinner-border-sm me-2 text-primary"></span>Consultando bitácora de auditoría institucional...</td></tr>';
+      emptyMsg.classList.add('d-none');
+
+      try {
+        const res = await apiRequest("obtenerLogsAuditoria", { limite: 200 }, "GET");
+        if (res && res.status === 'success' && res.logs) {
+          auditLogsCache = res.logs;
+        } else if (Array.isArray(res)) {
+          auditLogsCache = res;
+        } else {
+          auditLogsCache = [];
+        }
+        renderLogsTable(auditLogsCache);
+        if (esRecarga) showNotification("Bitácora actualizada.", true);
+      } catch (err) {
+        tbody.innerHTML = `<tr><td colspan="8" class="text-center text-danger py-4"><i class="fa-solid fa-triangle-exclamation me-2"></i>Error al consultar la bitácora: ${err.message}</td></tr>`;
+      }
+    }
+
+    function renderLogsTable(logsToRender = auditLogsCache) {
+      const tbody = document.getElementById('logsTableBody');
+      const emptyMsg = document.getElementById('emptyLogsMessage');
+      tbody.innerHTML = '';
+
+      if (!logsToRender || logsToRender.length === 0) {
+        emptyMsg.classList.remove('d-none');
+        return;
+      }
+      emptyMsg.classList.add('d-none');
+
+      logsToRender.forEach(log => {
+        const tr = document.createElement('tr');
+        const accion = toUpper(log.accion || '');
+        let badgeColor = 'bg-secondary';
+        if (accion.includes('LOGIN') || accion.includes('ACCESO')) badgeColor = 'bg-primary';
+        else if (accion.includes('CREAR') || accion.includes('GUARDAR') || accion.includes('REGISTRAR')) badgeColor = 'bg-success';
+        else if (accion.includes('ACTUALIZAR') || accion.includes('MODIFICAR')) badgeColor = 'bg-warning text-dark';
+        else if (accion.includes('ELIMINAR') || accion.includes('BORRAR') || accion.includes('FALLIDO') || accion.includes('DESACTIVAR')) badgeColor = 'bg-danger';
+
+        tr.innerHTML = `
+          <td><small class="text-muted fw-bold">${log.fechaHora || '-'}</small></td>
+          <td class="fw-bold">${toUpper(log.usuario || '-')}</td>
+          <td><span class="badge bg-light text-dark border">${toUpper(log.rol || '-')}</span></td>
+          <td><span class="badge ${badgeColor}">${accion}</span></td>
+          <td class="fw-semibold">${toUpper(log.modulo || '-')}</td>
+          <td><small>${toUpper(log.detalle || '-')}</small></td>
+          <td><small class="text-muted">${log.direccionIp || 'LOCAL'}</small></td>
+          <td><span class="badge ${toUpper(log.estatus) === 'FALLIDO' ? 'bg-danger' : 'bg-success'}">${toUpper(log.estatus || 'EXITOSO')}</span></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function filtrarLogs() {
+      const query = toUpper(document.getElementById('searchLogsInput').value);
+      const mod = toUpper(document.getElementById('filterModuloLog').value);
+
+      const filtered = auditLogsCache.filter(item => {
+        const matchesQuery = toUpper(item.usuario).includes(query) ||
+                             toUpper(item.accion).includes(query) ||
+                             toUpper(item.detalle).includes(query) ||
+                             toUpper(item.direccionIp).includes(query);
+        const matchesMod = !mod || toUpper(item.modulo) === mod;
+        return matchesQuery && matchesMod;
+      });
+
+      renderLogsTable(filtered);
+    }
+
+    function exportarCSVLogs() {
+      if (auditLogsCache.length === 0) return showNotification('No hay registros de auditoría para exportar.', false);
+      const headers = ["ID", "FECHA_HORA", "USUARIO", "ROL", "ACCION", "MODULO", "DETALLE", "DIRECCION_IP", "DISPOSITIVO", "ESTATUS"];
+      const rows = auditLogsCache.map(l => [
+        `"${l.id || ''}"`, `"${l.fechaHora || ''}"`, `"${toUpper(l.usuario)}"`, `"${toUpper(l.rol)}"`,
+        `"${toUpper(l.accion)}"`, `"${toUpper(l.modulo)}"`, `"${toUpper(l.detalle)}"`, `"${l.direccionIp || ''}"`,
+        `"${toUpper(l.dispositivo || '')}"`, `"${toUpper(l.estatus || 'EXITOSO')}"`
+      ]);
+      descargarCSV(headers, rows, "BITACORA_AUDITORIA_HCUAMP");
+    }
+
+    // ================= GESTIÓN DE USUARIOS INSTITUCIONALES =================
+    async function abrirModalUsuarios() {
+      if (!currentUser || toUpper(currentUser.rol) !== 'ADMINISTRADOR') {
+        return showNotification("Acceso denegado: solo el Administrador puede gestionar usuarios.", false);
+      }
+      const modal = new bootstrap.Modal(document.getElementById('gestionUsuariosModal'));
+      modal.show();
+      limpiarFormularioUsuario();
+      await cargarUsuarios();
+    }
+
+    async function cargarUsuarios(esRecarga = false) {
+      const tbody = document.getElementById('usersTableBody');
+      tbody.innerHTML = '<tr><td colspan="9" class="text-center py-3"><span class="spinner-border spinner-border-sm me-2 text-primary"></span>Consultando usuarios autorizados...</td></tr>';
+
+      try {
+        const res = await apiRequest("obtenerUsuarios", null, "GET");
+        if (res && res.status === 'success' && res.usuarios) {
+          userAccountsCache = res.usuarios;
+        } else if (Array.isArray(res)) {
+          userAccountsCache = res;
+        } else {
+          userAccountsCache = [];
+        }
+        renderUsersTable(userAccountsCache);
+        if (esRecarga) showNotification("Lista de usuarios actualizada.", true);
+      } catch (err) {
+        tbody.innerHTML = `<tr><td colspan="9" class="text-center text-danger py-3">Error al cargar usuarios: ${err.message}</td></tr>`;
+      }
+    }
+
+    function renderUsersTable(usersToRender = userAccountsCache) {
+      const tbody = document.getElementById('usersTableBody');
+      tbody.innerHTML = '';
+
+      if (!usersToRender || usersToRender.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="9" class="text-center text-muted py-3">No hay usuarios registrados.</td></tr>';
+        return;
+      }
+
+      usersToRender.forEach(u => {
+        const tr = document.createElement('tr');
+        const estado = toUpper(u.estado || 'ACTIVO');
+        const badgeClass = estado === 'ACTIVO' ? 'bg-success' : 'bg-secondary';
+        const isSelf = currentUser && currentUser.usuario === u.usuario;
+
+        tr.innerHTML = `
+          <td><small class="text-muted">#${u.sheetRow || '-'}</small></td>
+          <td class="fw-bold">${toUpper(u.nombreCompleto)}</td>
+          <td><code>${toUpper(u.usuario)}</code></td>
+          <td>${toUpper(u.correo)}</td>
+          <td><span class="badge ${u.rol === 'ADMINISTRADOR' ? 'bg-primary' : (u.rol === 'OPERADOR' ? 'bg-info text-dark' : 'bg-warning text-dark')}">${toUpper(u.rol)}</span></td>
+          <td>${toUpper(u.departamento || 'TIC')}</td>
+          <td><span class="badge ${badgeClass}">${estado}</span></td>
+          <td><small class="text-muted">${u.ultimoAcceso || 'SIN ACCESO'}</small></td>
+          <td class="text-center">
+            <button class="btn btn-sm btn-outline-primary me-1" title="Editar" onclick='modificarUsuario(${JSON.stringify(u)})'><i class="fa-solid fa-user-pen"></i></button>
+            ${!isSelf ? `<button class="btn btn-sm btn-outline-danger" title="Desactivar" onclick="desactivarUsuarioPrompt('${u.usuario}')"><i class="fa-solid fa-user-slash"></i></button>` : ''}
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function limpiarFormularioUsuario() {
+      editingUserRow = null;
+      const form = document.getElementById('userAdminForm');
+      if (form) {
+        form.reset();
+        form.classList.remove('was-validated');
+      }
+      document.getElementById('editingUserRow').value = '';
+      document.getElementById('userFormTitle').innerHTML = `<i class="fa-solid fa-user-plus me-2 text-primary"></i>Registrar Nuevo Usuario`;
+      document.getElementById('btnGuardarUsuarioSubmit').innerHTML = `<i class="fa-solid fa-floppy-disk me-1"></i> Guardar Usuario`;
+      document.getElementById('adminPassword').required = true;
+      document.getElementById('lblAdminPassword').innerText = "Contraseña Inicial *";
+      document.getElementById('hintPasswordEdit').classList.add('d-none');
+    }
+
+    function modificarUsuario(u) {
+      editingUserRow = u.sheetRow;
+      document.getElementById('editingUserRow').value = u.sheetRow || '';
+      document.getElementById('adminNombreCompleto').value = toUpper(u.nombreCompleto);
+      document.getElementById('adminCorreo').value = toUpper(u.correo);
+      document.getElementById('adminUsuario').value = toUpper(u.usuario);
+      document.getElementById('adminRol').value = toUpper(u.rol);
+      document.getElementById('adminDepartamento').value = toUpper(u.departamento || 'TIC');
+
+      document.getElementById('adminPassword').required = false;
+      document.getElementById('lblAdminPassword').innerText = "Nueva Contraseña (Opcional)";
+      document.getElementById('hintPasswordEdit').classList.remove('d-none');
+
+      document.getElementById('userFormTitle').innerHTML = `<i class="fa-solid fa-user-pen me-2 text-warning"></i>Modificando Usuario (${toUpper(u.usuario)})`;
+      document.getElementById('btnGuardarUsuarioSubmit').innerHTML = `<i class="fa-solid fa-floppy-disk me-1"></i> Actualizar Usuario`;
+      document.getElementById('gestionUsuariosModal').querySelector('.modal-body').scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    async function guardarUsuarioSubmit(event) {
+      if (event) event.preventDefault();
+      const form = document.getElementById('userAdminForm');
+      if (!form.checkValidity()) {
+        form.classList.add('was-validated');
+        return;
+      }
+
+      const nombre = toUpper(document.getElementById('adminNombreCompleto').value);
+      const correo = toUpper(document.getElementById('adminCorreo').value);
+      const usuario = toUpper(document.getElementById('adminUsuario').value);
+      const rol = toUpper(document.getElementById('adminRol').value);
+      const depto = toUpper(document.getElementById('adminDepartamento').value);
+      const passwordPlain = document.getElementById('adminPassword').value;
+
+      showLoading("Procesando usuario...", "Registrando en la base de datos institucional");
+
+      try {
+        let passwordHash = '';
+        if (passwordPlain) {
+          passwordHash = await hashSHA256Hex(passwordPlain);
+        }
+
+        let res;
+        if (editingUserRow) {
+          res = await apiRequest("actualizarUsuario", {
+            sheetRow: editingUserRow,
+            usuario: usuario,
+            data: {
+              nombreCompleto: nombre,
+              correo: correo,
+              rol: rol,
+              departamento: depto,
+              passwordHash: passwordHash
+            }
+          });
+        } else {
+          if (!passwordPlain) {
+            hideLoading();
+            return alert("Debe especificar una contraseña inicial para el nuevo usuario.");
+          }
+          res = await apiRequest("crearUsuario", {
+            data: {
+              nombreCompleto: nombre,
+              correo: correo,
+              usuario: usuario,
+              rol: rol,
+              departamento: depto,
+              passwordHash: passwordHash
+            }
+          });
+        }
+
+        hideLoading();
+        if (res && res.status === 'success') {
+          showNotification(res.message || "Usuario procesado exitosamente.", true);
+          limpiarFormularioUsuario();
+          await cargarUsuarios();
+        } else {
+          showNotification((res && res.message) || "No se pudo procesar el usuario.", false);
+        }
+      } catch (err) {
+        hideLoading();
+        showNotification("Error: " + err.message, false);
+      }
+    }
+
+    async function desactivarUsuarioPrompt(usuario) {
+      if (!confirm(`¿Está seguro de desactivar el acceso del usuario ${toUpper(usuario)}?`)) return;
+      showLoading("Desactivando usuario...", "Modificando estado en el servidor central");
+
+      try {
+        const res = await apiRequest("desactivarUsuario", { usuario: usuario });
+        hideLoading();
+        if (res && res.status === 'success') {
+          showNotification(res.message || "Usuario desactivado.", true);
+          await cargarUsuarios();
+        } else {
+          showNotification((res && res.message) || "Error al desactivar el usuario.", false);
+        }
+      } catch (err) {
+        hideLoading();
+        showNotification("Error: " + err.message, false);
+      }
+    }
+
     // ================= INICIALIZACIÓN =================
     function initTooltips() {
       try {
@@ -1516,7 +2579,64 @@
       // Inicializar tooltips de ayuda
       initTooltips();
 
-      // Cargar caché previo si existe para render inmediato
+      // Listeners de búsqueda
+      if (searchInput) searchInput.addEventListener('input', filterData);
+      if (searchNetworkInput) searchNetworkInput.addEventListener('input', filterNetworkData);
+      if (searchOfimaticaInput) searchOfimaticaInput.addEventListener('input', filterOfimaticaData);
+
+      const searchLogsInput = document.getElementById('searchLogsInput');
+      if (searchLogsInput) searchLogsInput.addEventListener('input', filtrarLogs);
+
+      // Listener de login
+      const loginForm = document.getElementById('loginForm');
+      if (loginForm) {
+        loginForm.addEventListener('submit', ejecutarLogin);
+      }
+
+      // Listener de administración de usuarios
+      const userAdminForm = document.getElementById('userAdminForm');
+      if (userAdminForm) {
+        userAdminForm.addEventListener('submit', guardarUsuarioSubmit);
+      }
+
+      // Listeners de formularios operativos
+      if (inventoryForm) {
+        inventoryForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          if (!inventoryForm.checkValidity()) {
+            e.stopPropagation();
+            inventoryForm.classList.add('was-validated');
+            return;
+          }
+          guardarOActualizarBien();
+        });
+      }
+
+      if (networkForm) {
+        networkForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          if (!networkForm.checkValidity()) {
+            e.stopPropagation();
+            networkForm.classList.add('was-validated');
+            return;
+          }
+          guardarOActualizarRed();
+        });
+      }
+
+      if (ofimaticaForm) {
+        ofimaticaForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          if (!ofimaticaForm.checkValidity()) {
+            e.stopPropagation();
+            ofimaticaForm.classList.add('was-validated');
+            return;
+          }
+          guardarOActualizarOfimatica();
+        });
+      }
+
+      // Cargar caché previo si existe para acelerar render inicial
       try {
         const cachedBienes = localStorage.getItem('hcuamp_bienes');
         const cachedRedes = localStorage.getItem('hcuamp_redes');
@@ -1526,44 +2646,11 @@
         if (cachedOfi) { ofimaticaRecords = JSON.parse(cachedOfi); renderOfimaticaTable(); }
       } catch (e) {}
 
-      // Sincronizar datos desde el servidor central
-      cargarTodoElSistema();
-
-      // Listeners de búsqueda
-      searchInput.addEventListener('input', filterData);
-      searchNetworkInput.addEventListener('input', filterNetworkData);
-      searchOfimaticaInput.addEventListener('input', filterOfimaticaData);
-
-      // Listeners de formularios
-      inventoryForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        if (!inventoryForm.checkValidity()) {
-          e.stopPropagation();
-          inventoryForm.classList.add('was-validated');
-          return;
-        }
-        guardarOActualizarBien();
-      });
-
-      networkForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        if (!networkForm.checkValidity()) {
-          e.stopPropagation();
-          networkForm.classList.add('was-validated');
-          return;
-        }
-        guardarOActualizarRed();
-      });
-
-      ofimaticaForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        if (!ofimaticaForm.checkValidity()) {
-          e.stopPropagation();
-          ofimaticaForm.classList.add('was-validated');
-          return;
-        }
-        guardarOActualizarOfimatica();
-      });
+      // Comprobar sesión activa y contención de seguridad
+      const sesionActiva = verificarSesionExistente();
+      if (!sesionActiva) {
+        mostrarPantallaLogin();
+      }
     });
 
     // ================= CARGA GENERAL =================
@@ -1604,11 +2691,28 @@
         } catch (e) {}
 
         hideLoading();
+        actualizarEstadoConexion(true);
         if (isManual) showNotification("Datos sincronizados con éxito desde el servidor institucional.", true);
       } catch (err) {
         hideLoading();
         console.warn("Aviso en sincronización:", err);
+        actualizarEstadoConexion(false);
         showNotification("Conectando con el servidor institucional...", false);
+      }
+    }
+
+    function actualizarEstadoConexion(conectado = true) {
+      const badge = document.getElementById('serverStatusBadge');
+      if (badge) {
+        if (conectado) {
+          badge.className = 'status-badge-connected';
+          badge.innerHTML = `<span class="status-indicator-dot"></span><i class="fa-solid fa-server text-success"></i><span>Servidor Central Conectado</span>`;
+          badge.title = "Servidor Central Conectado - Base de Datos Institucional en Línea";
+        } else {
+          badge.className = 'status-badge-connected status-badge-reconnecting';
+          badge.innerHTML = `<span class="status-indicator-dot reconnecting"></span><i class="fa-solid fa-server text-warning"></i><span>Reconectando Servidor Central...</span>`;
+          badge.title = "Intentando reestablecer enlace con el servidor central institucional";
+        }
       }
     }
 
@@ -1762,6 +2866,8 @@
       }
       emptyMessage.classList.add('d-none');
 
+      const isAdmin = currentUser && toUpper(currentUser.rol) === 'ADMINISTRADOR';
+
       dataToRender.forEach(item => {
         const tr = document.createElement('tr');
         const est = toUpper(item.estado);
@@ -1787,7 +2893,7 @@
           <td class="text-center">${fotoHtml}</td>
           <td class="text-center no-print">
             <button class="btn btn-sm btn-outline-primary me-1" title="Modificar" onclick='modificarBien(${JSON.stringify(item)})'><i class="fa-solid fa-pen-to-square"></i></button>
-            <button class="btn btn-sm btn-outline-danger" title="Borrar" onclick="borrarBien(${item.sheetRow})"><i class="fa-solid fa-trash-can"></i></button>
+            ${isAdmin ? `<button class="btn btn-sm btn-outline-danger" title="Borrar" onclick="borrarBien(${item.sheetRow})"><i class="fa-solid fa-trash-can"></i></button>` : ''}
           </td>
         `;
         tableBody.appendChild(tr);
@@ -1826,6 +2932,9 @@
     }
 
     async function borrarBien(sheetRow) {
+      if (!currentUser || toUpper(currentUser.rol) !== 'ADMINISTRADOR') {
+        return showNotification("Acceso denegado: solo el Administrador puede eliminar registros.", false);
+      }
       if (!confirm('¿Está seguro de eliminar este registro de bien institucional?')) return;
       showLoading("Eliminando registro...", "Marcando como inactivo en el sistema central");
 
@@ -1942,6 +3051,8 @@
       }
       emptyNetworkMessage.classList.add('d-none');
 
+      const isAdmin = currentUser && toUpper(currentUser.rol) === 'ADMINISTRADOR';
+
       dataToRender.forEach(item => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
@@ -1952,7 +3063,7 @@
           <td>${toUpper(item.responsable)}</td>
           <td class="text-center no-print">
             <button class="btn btn-sm btn-outline-primary me-1" title="Modificar" onclick='modificarRed(${JSON.stringify(item)})'><i class="fa-solid fa-pen-to-square"></i></button>
-            <button class="btn btn-sm btn-outline-danger" title="Borrar" onclick="borrarRed(${item.sheetRow})"><i class="fa-solid fa-trash-can"></i></button>
+            ${isAdmin ? `<button class="btn btn-sm btn-outline-danger" title="Borrar" onclick="borrarRed(${item.sheetRow})"><i class="fa-solid fa-trash-can"></i></button>` : ''}
           </td>
         `;
         networkTableBody.appendChild(tr);
@@ -1999,6 +3110,9 @@
     }
 
     async function borrarRed(sheetRow) {
+      if (!currentUser || toUpper(currentUser.rol) !== 'ADMINISTRADOR') {
+        return showNotification("Acceso denegado: solo el Administrador puede eliminar registros.", false);
+      }
       if (!confirm('¿Está seguro de eliminar este registro de red?')) return;
       showLoading("Eliminando registro...", "Marcando como inactivo en el sistema central");
 
@@ -2100,6 +3214,8 @@
       }
       emptyOfimaticaMessage.classList.add('d-none');
 
+      const isAdmin = currentUser && toUpper(currentUser.rol) === 'ADMINISTRADOR';
+
       dataToRender.forEach(item => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
@@ -2113,7 +3229,7 @@
           <td><span class="badge bg-secondary">${toUpper(item.tools.nube.nivel)}</span></td>
           <td class="text-center no-print">
             <button class="btn btn-sm btn-outline-primary me-1" title="Modificar" onclick='modificarOfimatica(${JSON.stringify(item)})'><i class="fa-solid fa-pen-to-square"></i></button>
-            <button class="btn btn-sm btn-outline-danger" title="Borrar" onclick="borrarOfimatica(${item.sheetRow})"><i class="fa-solid fa-trash-can"></i></button>
+            ${isAdmin ? `<button class="btn btn-sm btn-outline-danger" title="Borrar" onclick="borrarOfimatica(${item.sheetRow})"><i class="fa-solid fa-trash-can"></i></button>` : ''}
           </td>
         `;
         ofimaticaTableBody.appendChild(tr);
@@ -2149,6 +3265,9 @@
     }
 
     async function borrarOfimatica(sheetRow) {
+      if (!currentUser || toUpper(currentUser.rol) !== 'ADMINISTRADOR') {
+        return showNotification("Acceso denegado: solo el Administrador puede eliminar registros.", false);
+      }
       if (!confirm('¿Está seguro de eliminar este diagnóstico institucional?')) return;
       showLoading("Eliminando diagnóstico...", "Marcando como inactivo en el sistema central");
 

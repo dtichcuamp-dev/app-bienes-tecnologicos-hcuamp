@@ -4,8 +4,8 @@
   "description": "Sistema Institucional de Control - Bienes Tecnológicos, Redes y Ofimática - HCUAMP",
   "main": "index.html",
   "scripts": {
-    "start": "npx serve .",
-    "deploy": "npx vercel --prod"
+    "build": "node -e \"console.log('Build complete successfully')\"",
+    "start": "npx serve ."
   },
   "keywords": [
     "hcuamp",

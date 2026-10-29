@@ -103,8 +103,13 @@ function doGet(e) {
   // Si no se pide ninguna acción de API, sirve el index o devuelve info de estado
   if (!action) {
     try {
-      return HtmlService.createTemplateFromFile('Index')
-        .evaluate()
+      var template;
+      try {
+        template = HtmlService.createTemplateFromFile('index');
+      } catch (e1) {
+        template = HtmlService.createTemplateFromFile('Index');
+      }
+      return template.evaluate()
         .setTitle('Sistema Institucional - Inventario, Redes y Ofimática')
         .addMetaTag('viewport', 'width=device-width, initial-scale=1')
         .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);

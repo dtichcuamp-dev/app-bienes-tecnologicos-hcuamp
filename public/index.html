@@ -724,8 +724,8 @@
                 
                 <!-- Departamento / Ubicación HCUAMP -->
                 <div class="col-12 col-md-4">
-                  <label for="departamento" class="form-label">Departamento / Ubicación * <i class="fa-solid fa-circle-question text-muted" data-bs-toggle="tooltip" title="Seleccione el departamento, servicio médico o área administrativa donde está físicamente ubicado el bien."></i></label>
-                  <select class="form-select uppercase-input" id="departamento" required>
+                  <label for="departamentoBien" class="form-label">Departamento / Ubicación * <i class="fa-solid fa-circle-question text-muted" data-bs-toggle="tooltip" title="Seleccione el departamento, servicio médico o área administrativa donde está físicamente ubicado el bien."></i></label>
+                  <select class="form-select uppercase-input" id="departamentoBien" required>
                     <option value="" selected disabled>Seleccione departamento o servicio...</option>
                     <optgroup label="DIRECCIÓN Y DEPARTAMENTOS">
                       <option value="DIRECCIÓN GENERAL">DIRECCIÓN GENERAL</option>
@@ -991,6 +991,13 @@
           <div class="card-body p-3 p-md-4">
             <form id="networkForm" class="needs-validation" novalidate>
               <div class="row g-4">
+                <div class="col-12 col-md-4">
+                  <label for="departamentoRed" class="form-label">Departamento inspeccionado * <i class="fa-solid fa-circle-question text-muted" data-bs-toggle="tooltip" title="Departamento o área donde se realizó la inspección de la infraestructura de red."></i></label>
+                  <select class="form-select uppercase-input" id="departamentoRed" required>
+                    <option value="" selected disabled>Seleccione departamento o servicio...</option>
+                  </select>
+                </div>
+
                 <div class="col-12">
                   <label class="form-label fw-bold text-dark mb-2">1. Equipos en Área (Marque y asigne cantidad) <i class="fa-solid fa-circle-question text-muted" data-bs-toggle="tooltip" title="Indique los dispositivos de red presentes en esta ubicación activando la casilla e ingresando la cantidad."></i></label>
                   <div class="row g-3">
@@ -1033,7 +1040,7 @@
                   </div>
                 </div>
 
-                <hr class="text-muted opacity-25">
+                <div class="col-12"><hr class="text-muted opacity-25"></div>
 
                 <div class="col-12 col-md-6">
                   <label for="cableado" class="form-label">2. Tipo de Cableado * <i class="fa-solid fa-circle-question text-muted" data-bs-toggle="tooltip" title="Categoría del cableado de red estructurado presente en el departamento."></i></label>
@@ -1105,7 +1112,7 @@
           <div class="col-12 col-md-6">
             <div class="input-group">
               <span class="input-group-text bg-white border-end-0"><i class="fa-solid fa-magnifying-glass text-muted"></i></span>
-              <input type="text" id="searchNetworkInput" class="form-control border-start-0 uppercase-input" placeholder="Buscar por SSID, Proveedor o Responsable...">
+              <input type="text" id="searchNetworkInput" class="form-control border-start-0 uppercase-input" placeholder="Buscar por departamento, SSID, proveedor o responsable...">
             </div>
           </div>
           <div class="col-12 col-md-6 text-md-end d-flex gap-2 justify-content-md-end flex-wrap">
@@ -1118,6 +1125,7 @@
           <table class="table table-hover align-middle mb-0" id="networkTable">
             <thead>
               <tr>
+                <th>Departamento</th>
                 <th>SSID / Banda</th>
                 <th>Equipos (Cant)</th>
                 <th>Cableado / Canaliz.</th>
@@ -1151,8 +1159,12 @@
                   <input type="text" class="form-control uppercase-input" id="evaluadoNombre" placeholder="EJ. LCDO. JUAN PÉREZ" required>
                 </div>
                 <div class="col-12 col-md-6">
-                  <label for="evaluadoCorreo" class="form-label">Correo Electrónico o Departamento * <i class="fa-solid fa-circle-question text-muted" data-bs-toggle="tooltip" title="Correo electrónico institucional o servicio/departamento de adscripción."></i></label>
-                  <input type="text" class="form-control uppercase-input" id="evaluadoCorreo" placeholder="EJ. JUAN.PEREZ@HCUAMP.GOB.VE / DPTO. ADMINISTRACIÓN" required>
+                  <label for="departamentoOfi" class="form-label">Correo Electrónico o Departamento * <i class="fa-solid fa-circle-question text-muted" data-bs-toggle="tooltip" title="Seleccione el servicio/departamento de adscripción o indique un correo electrónico institucional."></i></label>
+                  <select class="form-select uppercase-input" id="departamentoOfi" required onchange="actualizarCampoCorreoOfimatica()">
+                    <option value="" selected disabled>Seleccione departamento o servicio...</option>
+                    <option value="__CORREO__">OTRO: CORREO ELECTRÓNICO</option>
+                  </select>
+                  <input type="text" class="form-control uppercase-input mt-2 d-none" id="evaluadoCorreo" placeholder="EJ. JUAN.PEREZ@HCUAMP.GOB.VE" aria-label="Correo electrónico institucional">
                 </div>
               </div>
 
@@ -1945,6 +1957,12 @@
       return (str || '').toString().trim().toUpperCase();
     }
 
+    function escapeHTML(value) {
+      return String(value ?? '').replace(/[&<>"']/g, char => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+      })[char]);
+    }
+
     // Elementos DOM
     const inventoryForm = document.getElementById('inventoryForm');
     const networkForm = document.getElementById('networkForm');
@@ -2617,9 +2635,36 @@
       } catch (e) {}
     }
 
+    function actualizarCampoCorreoOfimatica() {
+      const esCorreo = document.getElementById('departamentoOfi').value === '__CORREO__';
+      const campoCorreo = document.getElementById('evaluadoCorreo');
+      campoCorreo.classList.toggle('d-none', !esCorreo);
+      campoCorreo.required = esCorreo;
+    }
+
+    function seleccionarDepartamentoRed(departamento) {
+      const selector = document.getElementById('departamentoRed');
+      const valor = toUpper(departamento);
+      if (![...selector.options].some(option => option.value === valor)) {
+        const opcionAnterior = document.createElement('option');
+        opcionAnterior.value = valor;
+        opcionAnterior.textContent = `${valor} (REGISTRO ANTERIOR)`;
+        selector.appendChild(opcionAnterior);
+      }
+      selector.value = valor;
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
       // Inicializar tooltips de ayuda
       initTooltips();
+
+      // Reutilizar el catálogo de departamentos y servicios del módulo Bienes.
+      const opcionesDepartamentos = document.querySelectorAll('#departamentoBien > optgroup');
+      ['departamentoRed', 'departamentoOfi'].forEach(id => {
+        const selector = document.getElementById(id);
+        opcionesDepartamentos.forEach(grupo => selector.appendChild(grupo.cloneNode(true)));
+      });
+      actualizarCampoCorreoOfimatica();
 
       // Control estricto de captura:
       // La contraseña es el único campo que permite mayúsculas, minúsculas, números y caracteres especiales (máx. 16 caracteres).
@@ -2852,7 +2897,7 @@
 
       // Todos los campos de texto convertidos a MAYÚSCULAS
       const dataComun = {
-        departamento: toUpper(document.getElementById('departamento').value),
+        departamento: toUpper(document.getElementById('departamentoBien').value),
         grupo: toUpper(document.getElementById('grupo').value),
         subgrupo: toUpper(document.getElementById('subgrupo').value),
         seccion: toUpper(document.getElementById('seccion').value),
@@ -2968,7 +3013,7 @@
 
     function modificarBien(item) {
       editingBienRow = item.sheetRow;
-      document.getElementById('departamento').value = toUpper(item.departamento);
+      document.getElementById('departamentoBien').value = toUpper(item.departamento);
       document.getElementById('grupo').value = toUpper(item.grupo);
       document.getElementById('subgrupo').value = toUpper(item.subgrupo);
       document.getElementById('seccion').value = toUpper(item.seccion);
@@ -3065,6 +3110,7 @@
     async function guardarOActualizarRed() {
       const canalizacionChecked = document.querySelector('input[name="canalizacion"]:checked');
       const data = {
+        departamento: toUpper(document.getElementById('departamentoRed').value),
         modem: document.getElementById('chk_modem').checked ? document.getElementById('qty_modem').value : 0,
         router: document.getElementById('chk_router').checked ? document.getElementById('qty_router').value : 0,
         switch: document.getElementById('chk_switch').checked ? document.getElementById('qty_switch').value : 0,
@@ -3121,16 +3167,20 @@
       dataToRender.forEach(item => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
-          <td><span class="fw-bold text-primary">${toUpper(item.ssid)}</span><br><small class="text-muted">BANDA: ${toUpper(item.banda)}</small></td>
+          <td>${escapeHTML(item.departamento)}</td>
+          <td><span class="fw-bold text-primary">${escapeHTML(item.ssid)}</span><br><small class="text-muted">BANDA: ${escapeHTML(item.banda)}</small></td>
           <td><small>MODEM: <b>${item.modem}</b> | ROUTER: <b>${item.router}</b><br>SWITCH: <b>${item.switch}</b> | AP: <b>${item.ap}</b></small></td>
-          <td><span class="badge bg-secondary">${toUpper(item.cableado)}</span><br><small class="text-muted">CANALIZACIÓN: ${toUpper(item.canalizacion)}</small></td>
-          <td><div class="fw-semibold">${toUpper(item.proveedor)}</div><small class="text-muted">VEL: ${toUpper(item.velocidad)}</small></td>
-          <td>${toUpper(item.responsable)}</td>
+          <td><span class="badge bg-secondary">${escapeHTML(item.cableado)}</span><br><small class="text-muted">CANALIZACIÓN: ${escapeHTML(item.canalizacion)}</small></td>
+          <td><div class="fw-semibold">${escapeHTML(item.proveedor)}</div><small class="text-muted">VEL: ${escapeHTML(item.velocidad)}</small></td>
+          <td>${escapeHTML(item.responsable)}</td>
           <td class="text-center no-print">
-            <button class="btn btn-sm btn-outline-primary me-1" title="Modificar" onclick='modificarRed(${JSON.stringify(item)})'><i class="fa-solid fa-pen-to-square"></i></button>
-            ${isAdmin ? `<button class="btn btn-sm btn-outline-danger" title="Borrar" onclick="borrarRed(${item.sheetRow})"><i class="fa-solid fa-trash-can"></i></button>` : ''}
+            <button class="btn btn-sm btn-outline-primary me-1" title="Modificar" data-action="edit"><i class="fa-solid fa-pen-to-square"></i></button>
+            ${isAdmin ? `<button class="btn btn-sm btn-outline-danger" title="Borrar" data-action="delete"><i class="fa-solid fa-trash-can"></i></button>` : ''}
           </td>
         `;
+        tr.querySelector('[data-action="edit"]').addEventListener('click', () => modificarRed(item));
+        const deleteButton = tr.querySelector('[data-action="delete"]');
+        if (deleteButton) deleteButton.addEventListener('click', () => borrarRed(item.sheetRow));
         networkTableBody.appendChild(tr);
       });
       initTooltips();
@@ -3138,6 +3188,7 @@
 
     function modificarRed(item) {
       editingRedRow = item.sheetRow;
+      seleccionarDepartamentoRed(item.departamento);
       document.getElementById('chk_modem').checked = item.modem > 0;
       document.getElementById('qty_modem').disabled = item.modem == 0;
       document.getElementById('qty_modem').value = item.modem;
@@ -3209,6 +3260,7 @@
     function filterNetworkData() {
       const query = toUpper(searchNetworkInput.value);
       const filtered = networks.filter(item =>
+        toUpper(item.departamento).includes(query) ||
         toUpper(item.ssid).includes(query) ||
         toUpper(item.proveedor).includes(query) ||
         toUpper(item.responsable).includes(query)
@@ -3218,9 +3270,9 @@
 
     function exportarCSVRedes() {
       if (networks.length === 0) return showNotification('No hay datos para exportar.', false);
-      const headers = ["SSID", "BANDA", "MODEM", "ROUTER", "SWITCH", "AP", "CABLEADO", "CANALIZACIÓN", "PROVEEDOR", "VELOCIDAD", "RESPONSABLE"];
+      const headers = ["DEPARTAMENTO", "SSID", "BANDA", "MODEM", "ROUTER", "SWITCH", "AP", "CABLEADO", "CANALIZACIÓN", "PROVEEDOR", "VELOCIDAD", "RESPONSABLE"];
       const rows = networks.map(i => [
-        `"${toUpper(i.ssid)}"`, `"${toUpper(i.banda)}"`, i.modem, i.router, i.switch, i.ap,
+        `"${toUpper(i.departamento)}"`, `"${toUpper(i.ssid)}"`, `"${toUpper(i.banda)}"`, i.modem, i.router, i.switch, i.ap,
         `"${toUpper(i.cableado)}"`, `"${toUpper(i.canalizacion)}"`, `"${toUpper(i.proveedor)}"`, `"${toUpper(i.velocidad)}"`, `"${toUpper(i.responsable)}"`
       ]);
       descargarCSV(headers, rows, "INFRAESTRUCTURA_RED_HCUAMP");
@@ -3231,7 +3283,9 @@
       // Todo en mayúsculas
       const data = {
         nombre: toUpper(document.getElementById('evaluadoNombre').value),
-        correo: toUpper(document.getElementById('evaluadoCorreo').value),
+        correo: document.getElementById('departamentoOfi').value === '__CORREO__'
+          ? toUpper(document.getElementById('evaluadoCorreo').value)
+          : toUpper(document.getElementById('departamentoOfi').value),
         tools: {
           word: { frecuencia: toUpper(document.getElementById('freq_word').value), nivel: toUpper(document.getElementById('nivel_word').value) },
           excel: { frecuencia: toUpper(document.getElementById('freq_excel').value), nivel: toUpper(document.getElementById('nivel_excel').value) },
@@ -3305,7 +3359,16 @@
     function modificarOfimatica(item) {
       editingOfiRow = item.sheetRow;
       document.getElementById('evaluadoNombre').value = toUpper(item.nombre);
-      document.getElementById('evaluadoCorreo').value = toUpper(item.correo);
+      const correoOfimatica = toUpper(item.correo);
+      const selectorDepartamentoOfi = document.getElementById('departamentoOfi');
+      if ([...selectorDepartamentoOfi.options].some(option => option.value === correoOfimatica)) {
+        selectorDepartamentoOfi.value = correoOfimatica;
+        document.getElementById('evaluadoCorreo').value = '';
+      } else {
+        selectorDepartamentoOfi.value = '__CORREO__';
+        document.getElementById('evaluadoCorreo').value = correoOfimatica;
+      }
+      actualizarCampoCorreoOfimatica();
 
       document.getElementById('freq_word').value = toUpper(item.tools.word.frecuencia);
       document.getElementById('nivel_word').value = toUpper(item.tools.word.nivel);

@@ -841,6 +841,11 @@ function obtenerTodasLasRedes() {
 
 function guardarInfraestructuraRed(data, solicitante) {
   try {
+    var departamento = toUpper(data && data.departamento);
+    if (!departamento) {
+      return { status: "error", message: "Seleccione el departamento inspeccionado antes de guardar la red." };
+    }
+
     var ss = getSpreadsheet();
     if (!ss) return { status: "error", message: "No se pudo conectar al almacenamiento central." };
     var sheet = ss.getSheetByName("redes");
@@ -852,7 +857,7 @@ function guardarInfraestructuraRed(data, solicitante) {
     var idGenerado = "RED-" + Utilities.formatDate(new Date(), "America/Caracas", "yyyyMMdd-HHmmss");
     var rowData = [
       idGenerado,
-      toUpper(data.departamento),
+      departamento,
       Number(data.modem) || 0,
       Number(data.router) || 0,
       Number(data.switch) || 0,
@@ -877,6 +882,11 @@ function guardarInfraestructuraRed(data, solicitante) {
 
 function actualizarRed(sheetRow, data, solicitante) {
   try {
+    var departamento = toUpper(data && data.departamento);
+    if (!departamento) {
+      return { status: "error", message: "Seleccione el departamento inspeccionado antes de actualizar la red." };
+    }
+
     var ss = getSpreadsheet();
     if (!ss) return { status: "error", message: "No se pudo conectar al almacenamiento central." };
     var sheet = ss.getSheetByName("redes");
@@ -887,7 +897,7 @@ function actualizarRed(sheetRow, data, solicitante) {
 
     var rowData = [
       idActual,
-      toUpper(data.departamento),
+      departamento,
       Number(data.modem) || 0,
       Number(data.router) || 0,
       Number(data.switch) || 0,

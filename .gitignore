@@ -1,0 +1,7 @@
+# Dependencias y compilados locales
+node_modules/
+dist/
+public/
+.DS_Store
+Thumbs.db
+*.log
